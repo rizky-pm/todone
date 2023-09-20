@@ -1,9 +1,17 @@
 import styled from '@emotion/styled';
 
-const TodoListStyled = styled.ul`
+type TodoListProps = {
+  isAnyTodo: number;
+};
+
+const TodoListStyled = styled.ul<TodoListProps>`
   display: flex;
   flex-direction: column;
   row-gap: 20px;
+  height: 50vh;
+  overflow: scroll;
+
+  justify-content: ${(props) => (props.isAnyTodo > 0 ? '' : 'center')};
 
   .todo {
     padding: 12px;

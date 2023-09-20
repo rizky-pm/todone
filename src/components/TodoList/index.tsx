@@ -59,7 +59,7 @@ const TodoList = ({ todos, setTodos }: ComponentProps) => {
   };
 
   return (
-    <TodoListStyled>
+    <TodoListStyled isAnyTodo={todos.length}>
       {todos.length ? (
         todos.map((todo: TodoType) => (
           <li className='todo' key={todo.id}>
