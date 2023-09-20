@@ -12,6 +12,10 @@ const TodoListStyled = styled.ul`
     display: flex;
     align-items: center;
     justify-content: space-between;
+
+    .todo--done {
+      text-decoration: line-through;
+    }
   }
 
   .empty-todo-msg {
