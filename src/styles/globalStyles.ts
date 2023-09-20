@@ -15,14 +15,20 @@ const globalStyles = css`
     color: #0d1821;
   }
 
-  .container {
-    padding: 32px;
-  }
-
   li,
   ul {
     text-decoration: none;
     list-style: none;
+  }
+
+  .container {
+    padding: 32px;
+  }
+
+  .section {
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    padding: 16px;
+    border-radius: 4px;
   }
 `;
 
