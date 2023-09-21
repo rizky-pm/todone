@@ -39,7 +39,7 @@ const TodoList = ({ todos, setTodos }: ComponentProps) => {
               {todo.title}
             </span>
             <Checkbox
-              defaultChecked={todo.isDone}
+            checked={todo.isDone}
               {...label}
               onChange={(e) => {
                 handleChange(e, todo);
