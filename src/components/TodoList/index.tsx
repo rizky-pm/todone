@@ -2,8 +2,6 @@ import { Checkbox } from '@mui/material';
 import TodoListStyled from './todoList.styled';
 import { TodoType } from '../../../common';
 
-import styled from '@emotion/styled';
-
 type ComponentProps = {
   todos: TodoType[];
   setTodos: React.Dispatch<React.SetStateAction<TodoType[]>>;
@@ -41,6 +39,7 @@ const TodoList = ({ todos, setTodos }: ComponentProps) => {
               {todo.title}
             </span>
             <Checkbox
+              defaultChecked={todo.isDone}
               {...label}
               onChange={(e) => {
                 handleChange(e, todo);

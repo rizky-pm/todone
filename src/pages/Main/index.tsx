@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 import { Container, Button, TextField, Stack } from '@mui/material';
@@ -25,6 +25,7 @@ const Main = () => {
 
   const handleAddTodo = (data: TodoFormValues) => {
     const randomUUID = uuidv4();
+
     const payload: TodoType = {
       ...data,
       id: randomUUID,
@@ -33,8 +34,23 @@ const Main = () => {
     };
 
     setTodos((prevState) => [payload, ...prevState]);
+
     reset();
   };
+
+  useEffect(() => {
+    const todoLocalStorage = localStorage.getItem('todos');
+    if (todoLocalStorage) {
+      const parsedTodo = JSON.parse(todoLocalStorage);
+      setTodos(parsedTodo);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (todos.length) {
+      localStorage.setItem('todos', JSON.stringify(todos));
+    }
+  }, [todos]);
 
   return (
     <MainPage>
