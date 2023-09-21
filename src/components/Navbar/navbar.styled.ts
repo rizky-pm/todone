@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 
 export const Nav = styled.nav`
-  padding: 16px 32px;
+  padding: 8px 32px;
   background-color: ${(props) => props.theme.colors.white};
   color: ${(props) => props.theme.colors.primary};
   border-bottom: 2px solid ${(props) => props.theme.colors.primary};
@@ -10,6 +10,8 @@ export const Nav = styled.nav`
 
   ul {
     display: flex;
+    justify-content: space-between;
+    align-items: center;
     gap: 20px;
   }
 `;

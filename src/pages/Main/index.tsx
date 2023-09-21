@@ -8,6 +8,7 @@ import { Timestamp } from 'firebase/firestore';
 import MainPage from './main.styled';
 import { TodoType } from '../../../common';
 import TodoList from '../../components/TodoList';
+import AuthModal from '../../components/AuthModal';
 
 type TodoFormValues = {
   title: string;
@@ -91,6 +92,7 @@ const Main = () => {
           </Stack>
         </Container>
       </div>
+      <AuthModal />
     </MainPage>
   );
 };
