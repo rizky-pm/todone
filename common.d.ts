@@ -6,3 +6,8 @@ export type TodoType = {
   isDone: boolean;
   createdAt: Timestamp;
 };
+
+export interface IconProps {
+  w: string;
+  h: string;
+}

@@ -1,6 +1,7 @@
 import { Checkbox } from '@mui/material';
 import TodoListStyled from './todoList.styled';
 import { TodoType } from '../../../common';
+import TrashIcon from '../../assets/TrashIcon';
 
 type ComponentProps = {
   todos: TodoType[];
@@ -20,7 +21,7 @@ const TodoList = ({ todos, setTodos }: ComponentProps) => {
       return prevState.map((state) => {
         if (state.id === todo.id) {
           return {
-            ...state, // Use 'state' here, not 'todo'
+            ...state,
             isDone: isChecked,
           };
         } else {
@@ -28,6 +29,10 @@ const TodoList = ({ todos, setTodos }: ComponentProps) => {
         }
       });
     });
+  };
+
+  const handleDelete = (todoId: string) => {
+    setTodos((prevState) => prevState.filter((item) => item.id !== todoId));
   };
 
   return (
@@ -38,8 +43,16 @@ const TodoList = ({ todos, setTodos }: ComponentProps) => {
             <span className={`${todo.isDone ? 'todo--done' : ''}`}>
               {todo.title}
             </span>
+            <TrashIcon
+              w='22px'
+              h='22px'
+              marginLeft='auto'
+              onClickHandler={handleDelete}
+              todoId={todo.id}
+            />
             <Checkbox
-            checked={todo.isDone}
+              className='todo__checkbox'
+              checked={todo.isDone}
               {...label}
               onChange={(e) => {
                 handleChange(e, todo);

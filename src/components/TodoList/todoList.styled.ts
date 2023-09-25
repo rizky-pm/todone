@@ -16,6 +16,10 @@ const TodoListStyled = styled.ul`
     .todo--done {
       text-decoration: line-through;
     }
+
+    .todo__checkbox {
+      margin-left: 8px;
+    }
   }
 
   .empty-todo-msg {
