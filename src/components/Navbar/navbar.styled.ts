@@ -10,8 +10,12 @@ export const Nav = styled.nav`
 
   ul {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: center;
     gap: 20px;
+  }
+
+  .logo {
+    margin-right: auto;
   }
 `;
