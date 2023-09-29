@@ -3,6 +3,7 @@ import { Timestamp } from 'firebase/firestore';
 export type TodoType = {
   id: string;
   title: string;
+  userId?: string;
   isDone: boolean;
   createdAt: Timestamp;
 };

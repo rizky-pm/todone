@@ -27,9 +27,8 @@ const SignUpForm = () => {
   const handleSignUp = async (data: SignUpFormValues) => {
     const { email, password } = data;
     createUserWithEmailAndPassword(fireauth, email, password)
-      .then((userCredential) => {
-        const user = userCredential.user;
-        localStorage.setItem('user', JSON.stringify(user));
+      .then(() => {
+        localStorage.removeItem('todos');
         setIsSignUpModalOpen(!isSignUpModalOpen);
       })
       .catch((e) => console.log(e));

@@ -1,13 +1,13 @@
-import { useEffect, useState } from 'react';
 import { Button } from '@mui/material';
 import { Nav } from './navbar.styled';
-import { onAuthStateChanged, User, signOut } from 'firebase/auth';
+import { signOut } from 'firebase/auth';
 
+import useFirebaseAuth from '../../hooks/useFirebaseAuth';
 import useUiStore from '../../state/ui/uiStore';
 import { fireauth } from '../../config/firebase';
 
 const Navbar = () => {
-  const [user, setUser] = useState<User | null>(null);
+  const user = useFirebaseAuth();
 
   const {
     isSignInModalOpen,
@@ -25,16 +25,6 @@ const Navbar = () => {
         console.log(e);
       });
   };
-
-  useEffect(() => {
-    onAuthStateChanged(fireauth, (currentUser) => {
-      if (currentUser) {
-        setUser(currentUser);
-      } else {
-        setUser(null);
-      }
-    });
-  }, []);
 
   return (
     <Nav>

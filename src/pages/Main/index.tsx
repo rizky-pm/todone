@@ -3,8 +3,18 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { Container, Button, TextField, Stack } from '@mui/material';
 import { useForm } from 'react-hook-form';
-import { Timestamp } from 'firebase/firestore';
+import {
+  QuerySnapshot,
+  Timestamp,
+  collection,
+  onSnapshot,
+  query,
+  where,
+} from 'firebase/firestore';
+import { doc, setDoc } from 'firebase/firestore';
 
+import { firestore } from '../../config/firebase';
+import useFirebaseAuth from '../../hooks/useFirebaseAuth';
 import MainPage from './main.styled';
 import { TodoType } from '../../../common';
 import TodoList from '../../components/TodoList';
@@ -18,6 +28,8 @@ type TodoFormValues = {
 const Main = () => {
   const [todos, setTodos] = useState<TodoType[]>([]);
 
+  const user = useFirebaseAuth();
+
   const { register, formState, handleSubmit, reset } = useForm<TodoFormValues>({
     defaultValues: {
       title: '',
@@ -25,34 +37,63 @@ const Main = () => {
   });
   const { isSubmitting, errors } = formState;
 
-  const handleAddTodo = (data: TodoFormValues) => {
+  const handleAddTodo = async (data: TodoFormValues) => {
     const randomUUID = uuidv4();
 
-    const payload: TodoType = {
-      ...data,
-      id: randomUUID,
-      isDone: false,
-      createdAt: Timestamp.now(),
-    };
+    if (user) {
+      const payload: TodoType = {
+        ...data,
+        id: randomUUID,
+        userId: user?.uid,
+        isDone: false,
+        createdAt: Timestamp.now(),
+      };
 
-    setTodos((prevState) => [payload, ...prevState]);
+      await setDoc(doc(firestore, 'todos', randomUUID), payload);
+    } else {
+      const payload: TodoType = {
+        ...data,
+        id: randomUUID,
+        isDone: false,
+        createdAt: Timestamp.now(),
+      };
+
+      const todoLocal = localStorage.getItem('todos');
+      const todosArray = todoLocal ? JSON.parse(todoLocal) : [];
+      const tempTodos = [payload, ...todosArray];
+      setTodos(tempTodos);
+      localStorage.setItem('todos', JSON.stringify(tempTodos));
+    }
 
     reset();
   };
 
   useEffect(() => {
-    const todoLocalStorage = localStorage.getItem('todos');
-    if (todoLocalStorage) {
-      const parsedTodo = JSON.parse(todoLocalStorage);
-      setTodos(parsedTodo);
+    if (user === null) {
+      const todoLocal = localStorage.getItem('todos');
+      setTodos(todoLocal ? JSON.parse(todoLocal) : []);
     }
-  }, []);
+  }, [user]);
 
   useEffect(() => {
-    if (todos.length) {
-      localStorage.setItem('todos', JSON.stringify(todos));
+    if (user?.uid) {
+      const unsubscribe = onSnapshot(
+        query(collection(firestore, 'todos'), where('userId', '==', user?.uid)),
+        (snapshot: QuerySnapshot) => {
+          const todoList: TodoType[] = [];
+          snapshot.forEach((doc) => {
+            const data = doc.data() as TodoType;
+            todoList.push(data);
+          });
+          setTodos(todoList);
+        }
+      );
+
+      return () => {
+        unsubscribe();
+      };
     }
-  }, [todos]);
+  }, [user]);
 
   return (
     <MainPage>

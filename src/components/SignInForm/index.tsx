@@ -25,9 +25,9 @@ const SignInForm = () => {
     const { email, password } = data;
 
     signInWithEmailAndPassword(fireauth, email, password)
-      .then((userCredential) => {
-        localStorage.setItem('user', JSON.stringify(userCredential.user));
+      .then(() => {
         setIsSignInModalOpen(!isSignInModalOpen);
+        localStorage.removeItem('todos');
       })
       .catch((e) => {
         console.log(e);

@@ -2,6 +2,9 @@ import { Checkbox } from '@mui/material';
 import TodoListStyled from './todoList.styled';
 import { TodoType } from '../../../common';
 import TrashIcon from '../../assets/TrashIcon';
+import { deleteDoc, doc, updateDoc } from 'firebase/firestore';
+import { firestore } from '../../config/firebase';
+import useFirebaseAuth from '../../hooks/useFirebaseAuth';
 
 type ComponentProps = {
   todos: TodoType[];
@@ -11,28 +14,48 @@ type ComponentProps = {
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
 const TodoList = ({ todos, setTodos }: ComponentProps) => {
-  const handleChange = (
+  const user = useFirebaseAuth();
+
+  const handleChange = async (
     event: React.ChangeEvent<HTMLInputElement>,
-    todo: TodoType
+    todoId: string
   ) => {
     const isChecked = event.target.checked;
 
-    setTodos((prevState: TodoType[]) => {
-      return prevState.map((state) => {
-        if (state.id === todo.id) {
-          return {
-            ...state,
-            isDone: isChecked,
-          };
-        } else {
-          return state;
+    if (user) {
+      const todoDocRef = doc(firestore, 'todos', todoId);
+
+      try {
+        await updateDoc(todoDocRef, {
+          isDone: isChecked,
+        });
+      } catch (e) {
+        console.log(e);
+      }
+    } else {
+      const updatedTodos = todos.map((todo) => {
+        if (todo.id === todoId) {
+          return { ...todo, isDone: isChecked };
         }
+        return todo;
       });
-    });
+
+      setTodos(updatedTodos);
+    }
   };
 
-  const handleDelete = (todoId: string) => {
-    setTodos((prevState) => prevState.filter((item) => item.id !== todoId));
+  const handleDelete = async (todoId: string) => {
+    if (user) {
+      try {
+        await deleteDoc(doc(firestore, 'todos', todoId));
+      } catch (e) {
+        console.log(e);
+      }
+    } else {
+      // const updatedTodos = todos.filter((item) => item.id !== todoId);
+      // localStorage.setItem('todos', JSON.stringify(updatedTodos));
+      setTodos((prevState) => prevState.filter((item) => item.id !== todoId));
+    }
   };
 
   return (
@@ -55,7 +78,7 @@ const TodoList = ({ todos, setTodos }: ComponentProps) => {
               checked={todo.isDone}
               {...label}
               onChange={(e) => {
-                handleChange(e, todo);
+                handleChange(e, todo.id);
               }}
             />
           </li>
