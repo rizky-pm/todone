@@ -1,9 +1,11 @@
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { TextField, Button, Stack, Typography } from '@mui/material';
+import { TextField, Button, Stack, Typography, Alert } from '@mui/material';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import useUiStore from '../../state/ui/uiStore';
 
 import { fireauth } from '../../config/firebase';
+import { FirebaseError } from 'firebase/app';
 
 type SignUpFormValues = {
   email: string;
@@ -21,6 +23,7 @@ const SignUpForm = () => {
         passwordConfirm: '',
       },
     });
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
   const { isSubmitting, errors } = formState;
 
@@ -31,7 +34,19 @@ const SignUpForm = () => {
         localStorage.removeItem('todos');
         setIsSignUpModalOpen(!isSignUpModalOpen);
       })
-      .catch((e) => console.log(e));
+      .catch((e: FirebaseError) => {
+        if (e instanceof FirebaseError) {
+          switch (e.code) {
+            case 'auth/email-already-in-use':
+              setErrorMessage('Email already in use.');
+              break;
+            default:
+              console.error('Firebase Error:', e);
+          }
+        } else {
+          console.error('Non-Firebase Error:', e);
+        }
+      });
   };
 
   return (
@@ -43,6 +58,11 @@ const SignUpForm = () => {
         Save your todos across devices
       </Typography>
       <Stack spacing={2}>
+        {errorMessage && (
+          <Alert variant='standard' severity='error'>
+            {errorMessage}
+          </Alert>
+        )}
         <TextField
           id='email'
           placeholder='Email address'

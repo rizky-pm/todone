@@ -1,9 +1,11 @@
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { TextField, Button, Stack, Typography } from '@mui/material';
+import { TextField, Button, Stack, Typography, Alert } from '@mui/material';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 
 import { fireauth } from '../../config/firebase';
 import useUiStore from '../../state/ui/uiStore';
+import { FirebaseError } from 'firebase/app';
 
 type SignInFormValues = {
   email: string;
@@ -18,6 +20,7 @@ const SignInForm = () => {
       password: '',
     },
   });
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
   const { isSubmitting, errors } = formState;
 
@@ -29,8 +32,30 @@ const SignInForm = () => {
         setIsSignInModalOpen(!isSignInModalOpen);
         localStorage.removeItem('todos');
       })
-      .catch((e) => {
-        console.log(e);
+      .catch((e: FirebaseError) => {
+        if (e instanceof FirebaseError) {
+          switch (e.code) {
+            case 'auth/invalid-login-credentials':
+              setErrorMessage('Invalid email or password');
+              break;
+
+            case 'auth/too-many-requests':
+              setErrorMessage(
+                "Your account is temporarily disabled due to multiple login failures. Try again later."
+              );
+              break;
+
+            case 'auth/credential-already-in-use':
+              setErrorMessage(
+                "Account conflict error. The provided credential is already associated with an existing user."
+              );
+                break;
+            default:
+              console.error('Firebase Error:', e);
+          }
+        } else {
+          console.error('Non-Firebase Error:', e);
+        }
       });
   };
 
@@ -42,7 +67,13 @@ const SignInForm = () => {
       <Typography variant='subtitle2' gutterBottom>
         Save your todos across devices
       </Typography>
+
       <Stack spacing={2}>
+        {errorMessage && (
+          <Alert variant='standard' severity='error'>
+            {errorMessage}
+          </Alert>
+        )}
         <TextField
           id='email'
           placeholder='Email address'
