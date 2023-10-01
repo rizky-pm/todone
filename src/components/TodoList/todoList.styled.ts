@@ -9,7 +9,7 @@ const TodoListStyled = styled.ul<TodoListProps>`
   flex-direction: column;
   row-gap: 20px;
   height: 50vh;
-  overflow: scroll;
+  overflow: auto;
 
   justify-content: ${(props) => (props.isAnyTodo > 0 ? '' : 'center')};
 

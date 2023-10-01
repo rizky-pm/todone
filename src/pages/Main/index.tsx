@@ -8,6 +8,7 @@ import {
   Timestamp,
   collection,
   onSnapshot,
+  orderBy,
   query,
   where,
 } from 'firebase/firestore';
@@ -78,7 +79,11 @@ const Main = () => {
   useEffect(() => {
     if (user?.uid) {
       const unsubscribe = onSnapshot(
-        query(collection(firestore, 'todos'), where('userId', '==', user?.uid)),
+        query(
+          collection(firestore, 'todos'),
+          where('userId', '==', user?.uid),
+          orderBy('createdAt')
+        ),
         (snapshot: QuerySnapshot) => {
           const todoList: TodoType[] = [];
           snapshot.forEach((doc) => {
