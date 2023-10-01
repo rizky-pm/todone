@@ -1,20 +1,37 @@
-import { Checkbox } from '@mui/material';
+import { useState, useEffect } from 'react';
+import { Tabs, Tab, Box, Checkbox, Stack } from '@mui/material';
+
 import TodoListStyled from './todoList.styled';
 import { TodoType } from '../../../common';
 import TrashIcon from '../../assets/TrashIcon';
 import { deleteDoc, doc, updateDoc } from 'firebase/firestore';
 import { firestore } from '../../config/firebase';
 import useFirebaseAuth from '../../hooks/useFirebaseAuth';
+import TodoTab from '../TodoTab';
 
 type ComponentProps = {
   todos: TodoType[];
   setTodos: React.Dispatch<React.SetStateAction<TodoType[]>>;
 };
 
-const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
+const label = { inputProps: { 'aria-label': 'Mark todo' } };
+
+function a11yProps(index: number) {
+  return {
+    id: `todos-filter-${index}`,
+    'aria-controls': `todos-filter-panel-${index}`,
+  };
+}
 
 const TodoList = ({ todos, setTodos }: ComponentProps) => {
+  const [value, setValue] = useState(0);
+  const [completedTodos, setCompletedTodos] = useState<TodoType[]>([]);
+  const [uncompleteTodos, setUncompleteTodos] = useState<TodoType[]>([]);
   const user = useFirebaseAuth();
+
+  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+    setValue(newValue);
+  };
 
   const handleChange = async (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -52,41 +69,117 @@ const TodoList = ({ todos, setTodos }: ComponentProps) => {
         console.log(e);
       }
     } else {
-      // const updatedTodos = todos.filter((item) => item.id !== todoId);
-      // localStorage.setItem('todos', JSON.stringify(updatedTodos));
       setTodos((prevState) => prevState.filter((item) => item.id !== todoId));
     }
   };
 
+  useEffect(() => {
+    setCompletedTodos(() => todos.filter((todo) => todo.isDone === true));
+    setUncompleteTodos(() => todos.filter((todo) => todo.isDone === false));
+  }, [todos]);
+
   return (
-    <TodoListStyled isAnyTodo={todos.length}>
-      {todos.length ? (
-        todos.map((todo: TodoType) => (
-          <li className='todo' key={todo.id}>
-            <span className={`${todo.isDone ? 'todo--done' : ''}`}>
-              {todo.title}
-            </span>
-            <TrashIcon
-              w='22px'
-              h='22px'
-              marginLeft='auto'
-              onClickHandler={handleDelete}
-              todoId={todo.id}
-            />
-            <Checkbox
-              className='todo__checkbox'
-              checked={todo.isDone}
-              {...label}
-              onChange={(e) => {
-                handleChange(e, todo.id);
-              }}
-            />
-          </li>
-        ))
-      ) : (
-        <p className='empty-todo-msg'>Currently no todo.</p>
-      )}
-    </TodoListStyled>
+    <>
+      <Box borderBottom={1} borderColor={'divider'}>
+        <Tabs
+          value={value}
+          onChange={handleTabChange}
+          aria-label='Todos filter'
+        >
+          <Tab label='All' {...a11yProps(0)} />
+          <Tab label='Completed' {...a11yProps(1)} />
+          <Tab label='Uncomplete' {...a11yProps(2)} />
+        </Tabs>
+      </Box>
+      <TodoListStyled isAnyTodo={todos.length}>
+        <Box>
+          <TodoTab value={value} index={0}>
+            <Stack spacing={2}>
+              {todos.length
+                ? todos.map((todo: TodoType) => (
+                    <div className='todo' key={todo.id}>
+                      <span className={`${todo.isDone ? 'todo--done' : ''}`}>
+                        {todo.title}
+                      </span>
+                      <TrashIcon
+                        w='22px'
+                        h='22px'
+                        marginLeft='auto'
+                        onClickHandler={handleDelete}
+                        todoId={todo.id}
+                      />
+                      <Checkbox
+                        className='todo__checkbox'
+                        checked={todo.isDone}
+                        {...label}
+                        onChange={(e) => {
+                          handleChange(e, todo.id);
+                        }}
+                      />
+                    </div>
+                  ))
+                : 'No todos. Time to start anew!'}
+            </Stack>
+          </TodoTab>
+          <TodoTab value={value} index={1}>
+            <Stack spacing={2}>
+              {completedTodos.length
+                ? completedTodos.map((todo: TodoType) => (
+                    <div className='todo' key={todo.id}>
+                      <span className={`${todo.isDone ? 'todo--done' : ''}`}>
+                        {todo.title}
+                      </span>
+                      <TrashIcon
+                        w='22px'
+                        h='22px'
+                        marginLeft='auto'
+                        onClickHandler={handleDelete}
+                        todoId={todo.id}
+                      />
+                      <Checkbox
+                        className='todo__checkbox'
+                        checked={todo.isDone}
+                        {...label}
+                        onChange={(e) => {
+                          handleChange(e, todo.id);
+                        }}
+                      />
+                    </div>
+                  ))
+                : 'Sadly, there are no completed to-dos at the moment.'}
+            </Stack>
+          </TodoTab>
+          <TodoTab value={value} index={2}>
+            <Stack spacing={2}>
+              {uncompleteTodos.length
+                ? uncompleteTodos.map((todo: TodoType) => (
+                    <div className='todo' key={todo.id}>
+                      <span className={`${todo.isDone ? 'todo--done' : ''}`}>
+                        {todo.title}
+                      </span>
+                      <TrashIcon
+                        w='22px'
+                        h='22px'
+                        marginLeft='auto'
+                        onClickHandler={handleDelete}
+                        todoId={todo.id}
+                      />
+                      <Checkbox
+                        className='todo__checkbox'
+                        checked={todo.isDone}
+                        {...label}
+                        onChange={(e) => {
+                          handleChange(e, todo.id);
+                        }}
+                      />
+                    </div>
+                  ))
+                : "All done! Now, let's add more."}
+            </Stack>
+          </TodoTab>
+        </Box>
+      </TodoListStyled>
+    </>
   );
 };
 

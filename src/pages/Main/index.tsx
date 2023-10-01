@@ -105,7 +105,7 @@ const Main = () => {
       <div className='container'>
         <Container maxWidth='sm'>
           <Stack spacing={2}>
-            <div className='section'>
+            <Stack spacing={2}>
               <h1 className='title'>todone</h1>
               <form onSubmit={handleSubmit(handleAddTodo)} noValidate>
                 <Stack spacing={1}>
@@ -131,7 +131,7 @@ const Main = () => {
                   </Button>
                 </Stack>
               </form>
-            </div>
+            </Stack>
 
             <div className='section'>
               <TodoList todos={todos} setTodos={setTodos} />

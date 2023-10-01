@@ -5,13 +5,8 @@ type TodoListProps = {
 };
 
 const TodoListStyled = styled.ul<TodoListProps>`
-  display: flex;
-  flex-direction: column;
-  row-gap: 20px;
   height: 50vh;
   overflow: auto;
-
-  justify-content: ${(props) => (props.isAnyTodo > 0 ? '' : 'center')};
 
   .todo {
     padding: 12px;
@@ -28,10 +23,6 @@ const TodoListStyled = styled.ul<TodoListProps>`
     .todo__checkbox {
       margin-left: 8px;
     }
-  }
-
-  .empty-todo-msg {
-    text-align: center;
   }
 `;
 
