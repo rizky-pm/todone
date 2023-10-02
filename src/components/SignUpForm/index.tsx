@@ -6,8 +6,10 @@ import { createUserWithEmailAndPassword } from 'firebase/auth';
 import styled from '@emotion/styled';
 
 import useUiStore from '../../state/ui/uiStore';
-import { fireauth } from '../../config/firebase';
+import { fireauth, firestore } from '../../config/firebase';
 import SignUpIllustration from '../../assets/illustrations/undraw_signup.svg';
+import { TodoType } from '../../../common';
+import { doc, setDoc } from 'firebase/firestore';
 
 type SignUpFormValues = {
   email: string;
@@ -41,8 +43,23 @@ const SignUpForm = () => {
   const handleSignUp = async (data: SignUpFormValues) => {
     const { email, password } = data;
     createUserWithEmailAndPassword(fireauth, email, password)
-      .then(() => {
+      .then((userCredential) => {
+        const todoLocal = localStorage.getItem('todos');
+
+        if (todoLocal) {
+          const parsedTodoLocal = JSON.parse(todoLocal);
+          parsedTodoLocal.forEach(async (todo: TodoType) => {
+            const payload: TodoType = {
+              ...todo,
+              userId: userCredential.user.uid,
+            };
+
+            await setDoc(doc(firestore, 'todos', todo.id), payload);
+          });
+        }
+
         localStorage.removeItem('todos');
+
         setIsSignUpModalOpen(!isSignUpModalOpen);
       })
       .catch((e: FirebaseError) => {
