@@ -85,6 +85,9 @@ const TodoList = ({ todos, setTodos }: ComponentProps) => {
           value={value}
           onChange={handleTabChange}
           aria-label='Todos filter'
+          variant='scrollable'
+          scrollButtons
+          allowScrollButtonsMobile
         >
           <Tab label='All' {...a11yProps(0)} />
           <Tab label='Completed' {...a11yProps(1)} />
@@ -98,9 +101,13 @@ const TodoList = ({ todos, setTodos }: ComponentProps) => {
               {todos.length
                 ? todos.map((todo: TodoType) => (
                     <div className='todo' key={todo.id}>
-                      <span className={`${todo.isDone ? 'todo--done' : ''}`}>
+                      <p
+                        className={`todo__title ${
+                          todo.isDone ? 'todo--done' : ''
+                        }`}
+                      >
                         {todo.title}
-                      </span>
+                      </p>
                       <TrashIcon
                         w='22px'
                         h='22px'
@@ -126,9 +133,13 @@ const TodoList = ({ todos, setTodos }: ComponentProps) => {
               {completedTodos.length
                 ? completedTodos.map((todo: TodoType) => (
                     <div className='todo' key={todo.id}>
-                      <span className={`${todo.isDone ? 'todo--done' : ''}`}>
+                      <p
+                        className={`todo__title ${
+                          todo.isDone ? 'todo--done' : ''
+                        }`}
+                      >
                         {todo.title}
-                      </span>
+                      </p>
                       <TrashIcon
                         w='22px'
                         h='22px'
@@ -154,9 +165,13 @@ const TodoList = ({ todos, setTodos }: ComponentProps) => {
               {uncompleteTodos.length
                 ? uncompleteTodos.map((todo: TodoType) => (
                     <div className='todo' key={todo.id}>
-                      <span className={`${todo.isDone ? 'todo--done' : ''}`}>
+                      <p
+                        className={`todo__title ${
+                          todo.isDone ? 'todo--done' : ''
+                        }`}
+                      >
                         {todo.title}
-                      </span>
+                      </p>
                       <TrashIcon
                         w='22px'
                         h='22px'

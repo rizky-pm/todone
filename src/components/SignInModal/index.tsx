@@ -16,6 +16,11 @@ const StyledModal = styled.div`
   border: 2px solid ${(props) => props.theme.colors.primary};
   padding: 32px;
   text-align: center;
+  border-radius: 8px;
+
+  @media ${(props) => props.theme.mediaQueries.xs} {
+    width: 85%;
+  }
 `;
 
 const SignInModal = () => {
@@ -43,14 +48,6 @@ const SignInModal = () => {
         <StyledModal>
           <SignInForm />
         </StyledModal>
-        {/* <Box sx={style}>
-          <Typography id='transition-modal-title' variant='h6' component='h2'>
-            Text in a modal
-          </Typography>
-          <Typography id='transition-modal-description' sx={{ mt: 2 }}>
-            Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-          </Typography>
-        </Box> */}
       </Fade>
     </Modal>
   );

@@ -5,7 +5,7 @@ import { Global } from '@emotion/react';
 import { ThemeProvider } from '@mui/material/styles';
 import { ThemeProvider as ThemeProviderEmotion } from '@emotion/react';
 
-import globalStyles from './styles/globalStyles.ts';
+import {globalStyles} from './styles/globalStyles.ts';
 import muiTheme from './styles/muiTheme.ts';
 import theme from './styles/theme.ts';
 

@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 
-const globalStyles = css`
+export const globalStyles = css`
   *,
   *::before,
   *::after {
@@ -31,5 +31,3 @@ const globalStyles = css`
     border-radius: 4px;
   }
 `;
-
-export default globalStyles;

@@ -102,43 +102,43 @@ const Main = () => {
 
   return (
     <MainPage>
-      <div className='container'>
-        <Container maxWidth='sm'>
+      {/* <div className='container'> */}
+      <Container maxWidth='sm'>
+        <Stack spacing={2}>
           <Stack spacing={2}>
-            <Stack spacing={2}>
-              <h1 className='title'>todone</h1>
-              <form onSubmit={handleSubmit(handleAddTodo)} noValidate>
-                <Stack spacing={1}>
-                  <TextField
-                    id='todoTitle'
-                    variant='outlined'
-                    fullWidth
-                    size='small'
-                    placeholder='Your todo'
-                    {...register('title', {
-                      required: 'Todo is required',
-                    })}
-                    error={!!errors.title}
-                    helperText={errors.title?.message}
-                  />
-                  <Button
-                    type='submit'
-                    variant='contained'
-                    fullWidth
-                    disabled={isSubmitting}
-                  >
-                    Add Todo
-                  </Button>
-                </Stack>
-              </form>
-            </Stack>
-
-            <div className='section'>
-              <TodoList todos={todos} setTodos={setTodos} />
-            </div>
+            <h1 className='title'>todone</h1>
+            <form onSubmit={handleSubmit(handleAddTodo)} noValidate>
+              <Stack spacing={1}>
+                <TextField
+                  id='todoTitle'
+                  variant='outlined'
+                  fullWidth
+                  size='small'
+                  placeholder='Your todo'
+                  {...register('title', {
+                    required: 'Todo is required',
+                  })}
+                  error={!!errors.title}
+                  helperText={errors.title?.message}
+                />
+                <Button
+                  type='submit'
+                  variant='contained'
+                  fullWidth
+                  disabled={isSubmitting}
+                >
+                  Add Todo
+                </Button>
+              </Stack>
+            </form>
           </Stack>
-        </Container>
-      </div>
+
+          <div className='section'>
+            <TodoList todos={todos} setTodos={setTodos} />
+          </div>
+        </Stack>
+      </Container>
+      {/* </div> */}
       <SignInModal />
       <SignUpModal />
     </MainPage>

@@ -1,6 +1,15 @@
 import React from 'react';
 import { Box } from '@mui/material';
 
+import styled from '@emotion/styled';
+
+const CustomBox = styled(Box)`
+  padding: 1rem 1.25rem;
+
+  @media ${(props) => props.theme.mediaQueries.xs} {
+    padding: 1rem 0.25rem;
+  }
+`;
 interface ComponentProps {
   children?: React.ReactNode;
   index: number;
@@ -19,9 +28,7 @@ const TodoTab = (props: ComponentProps) => {
       {...other}
     >
       {value === index && (
-        <Box sx={{ p: 3 }} textAlign={'center'}>
-          {children}
-        </Box>
+        <CustomBox textAlign={'center'}>{children}</CustomBox>
       )}
     </div>
   );

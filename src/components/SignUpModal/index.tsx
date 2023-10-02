@@ -16,6 +16,11 @@ const StyledModal = styled.div`
   border: 2px solid ${(props) => props.theme.colors.primary};
   padding: 32px;
   text-align: center;
+  border-radius: 8px;
+
+  @media ${(props) => props.theme.mediaQueries.xs} {
+    width: 85%;
+  }
 `;
 
 const SignUpModal = () => {

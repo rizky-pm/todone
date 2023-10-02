@@ -4,7 +4,7 @@ type TodoListProps = {
   isAnyTodo: number;
 };
 
-const TodoListStyled = styled.ul<TodoListProps>`
+const TodoListStyled = styled.div<TodoListProps>`
   height: 50vh;
   overflow: auto;
 
@@ -15,6 +15,16 @@ const TodoListStyled = styled.ul<TodoListProps>`
     display: flex;
     align-items: center;
     justify-content: space-between;
+
+    &__title {
+      text-align: left;
+      max-width: 75%;
+      word-wrap: break-word;
+
+      @media ${(props) => props.theme.mediaQueries.xs} {
+        font-size: 14px;
+      }
+    }
 
     .todo--done {
       text-decoration: line-through;

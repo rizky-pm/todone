@@ -41,15 +41,15 @@ const SignInForm = () => {
 
             case 'auth/too-many-requests':
               setErrorMessage(
-                "Your account is temporarily disabled due to multiple login failures. Try again later."
+                'Your account is temporarily disabled due to multiple login failures. Try again later.'
               );
               break;
 
             case 'auth/credential-already-in-use':
               setErrorMessage(
-                "Account conflict error. The provided credential is already associated with an existing user."
+                'Account conflict error. The provided credential is already associated with an existing user.'
               );
-                break;
+              break;
             default:
               console.error('Firebase Error:', e);
           }
@@ -61,7 +61,7 @@ const SignInForm = () => {
 
   return (
     <form noValidate onSubmit={handleSubmit(handleSignIn)}>
-      <Typography variant='h5' fontWeight={'bold'}>
+      <Typography variant='h5' fontWeight={'700'}>
         Sign In
       </Typography>
       <Typography variant='subtitle2' gutterBottom>
