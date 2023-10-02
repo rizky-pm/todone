@@ -13,10 +13,10 @@ const StyledModal = styled.div`
   transform: translate(-50%, -50%);
   width: 30%;
   background-color: white;
-  border: 2px solid ${(props) => props.theme.colors.primary};
-  padding: 32px;
+  border: 0.125rem solid ${(props) => props.theme.colors.primary};
+  padding: 2rem;
   text-align: center;
-  border-radius: 8px;
+  border-radius: 0.5rem;
 
   @media ${(props) => props.theme.mediaQueries.xs} {
     width: 85%;

@@ -1,16 +1,27 @@
+import { FirebaseError } from 'firebase/app';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { TextField, Button, Stack, Typography, Alert } from '@mui/material';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import useUiStore from '../../state/ui/uiStore';
+import styled from '@emotion/styled';
 
+import useUiStore from '../../state/ui/uiStore';
 import { fireauth } from '../../config/firebase';
-import { FirebaseError } from 'firebase/app';
+import SignUpIllustration from '../../assets/illustrations/undraw_signup.svg';
 
 type SignUpFormValues = {
   email: string;
   password: string;
   passwordConfirm: string;
+};
+
+const Illustration = styled.img`
+  width: 15.625rem;
+  height: 9.375rem;
+`;
+
+Illustration.defaultProps = {
+  src: SignUpIllustration,
 };
 
 const SignUpForm = () => {
@@ -51,6 +62,7 @@ const SignUpForm = () => {
 
   return (
     <form noValidate onSubmit={handleSubmit(handleSignUp)}>
+      <Illustration />
       <Typography variant='h5' fontWeight={'bold'}>
         Sign Up
       </Typography>

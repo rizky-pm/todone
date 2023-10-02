@@ -1,7 +1,14 @@
 import { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
-import { Container, Button, TextField, Stack } from '@mui/material';
+import {
+  Container,
+  Button,
+  TextField,
+  Stack,
+  Typography,
+  useMediaQuery,
+} from '@mui/material';
 import { useForm } from 'react-hook-form';
 import {
   QuerySnapshot,
@@ -30,6 +37,7 @@ const Main = () => {
   const [todos, setTodos] = useState<TodoType[]>([]);
 
   const user = useFirebaseAuth();
+  const isSmallDevice = useMediaQuery('(max-width:600px)');
 
   const { register, formState, handleSubmit, reset } = useForm<TodoFormValues>({
     defaultValues: {
@@ -102,11 +110,18 @@ const Main = () => {
 
   return (
     <MainPage>
-      {/* <div className='container'> */}
       <Container maxWidth='sm'>
         <Stack spacing={2}>
           <Stack spacing={2}>
-            <h1 className='title'>todone</h1>
+            <Typography
+              // variant='h6'
+              fontWeight={600}
+              variant={isSmallDevice ? 'h6' : 'h5'}
+              gutterBottom
+              className='title'
+            >
+              Task Tracking Made Effortless.
+            </Typography>
             <form onSubmit={handleSubmit(handleAddTodo)} noValidate>
               <Stack spacing={1}>
                 <TextField
@@ -138,7 +153,6 @@ const Main = () => {
           </div>
         </Stack>
       </Container>
-      {/* </div> */}
       <SignInModal />
       <SignUpModal />
     </MainPage>

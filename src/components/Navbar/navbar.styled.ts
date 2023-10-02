@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 
 export const Nav = styled.nav`
-  padding: 16px 32px;
+  padding: 1rem 2rem;
   background-color: ${(props) => props.theme.colors.white};
   color: ${(props) => props.theme.colors.primary};
   border-bottom: 0.125rem solid ${(props) => props.theme.colors.primary};
@@ -16,7 +16,7 @@ export const Nav = styled.nav`
 
   .logo {
     margin-right: auto;
-    font-size: 24px;
+    font-size: 1.5rem;
 
     @media ${(props) => props.theme.mediaQueries.xs} {
       font-size: 20px;
@@ -24,10 +24,10 @@ export const Nav = styled.nav`
   }
 
   @media ${(props) => props.theme.mediaQueries.xs} {
-    padding: 12px 16px;
+    padding: 0.75rem 1rem;
   }
 
   @media ${(props) => props.theme.mediaQueries.m} {
-    padding: 12px 32px;
+    padding: 0.75rem 2rem;
   }
 `;

@@ -2,7 +2,9 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { TextField, Button, Stack, Typography, Alert } from '@mui/material';
 import { signInWithEmailAndPassword } from 'firebase/auth';
+import styled from '@emotion/styled';
 
+import SignInIllustration from '../../assets/illustrations/undraw_signin.svg';
 import { fireauth } from '../../config/firebase';
 import useUiStore from '../../state/ui/uiStore';
 import { FirebaseError } from 'firebase/app';
@@ -10,6 +12,15 @@ import { FirebaseError } from 'firebase/app';
 type SignInFormValues = {
   email: string;
   password: string;
+};
+
+const Illustration = styled.img`
+  width: 15.625rem;
+  height: 9.375rem;
+`;
+
+Illustration.defaultProps = {
+  src: SignInIllustration,
 };
 
 const SignInForm = () => {
@@ -61,6 +72,7 @@ const SignInForm = () => {
 
   return (
     <form noValidate onSubmit={handleSubmit(handleSignIn)}>
+      <Illustration />
       <Typography variant='h5' fontWeight={'700'}>
         Sign In
       </Typography>

@@ -7,11 +7,11 @@ const theme = {
     primaryDark: '#28679b',
   },
   mediaQueries: {
-    xs: 'only screen and (max-width: 600px)',
-    s: 'only screen and (min-width: 600px)',
-    m: 'only screen and (min-width: 768px)',
-    l: 'only screen and (min-width: 992px)',
-    xl: 'only screen and (min-width: 1200px)',
+    xs: 'only screen and (max-width: 37.5rem)',
+    s: 'only screen and (min-width: 37.5rem)',
+    m: 'only screen and (min-width: 48rem)',
+    l: 'only screen and (min-width: 62rem)',
+    xl: 'only screen and (min-width: 75rem)',
   },
 };
 

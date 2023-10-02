@@ -1,10 +1,10 @@
 import styled from '@emotion/styled';
 
 const MainPage = styled.main`
-  padding: 32px;
+  padding: 2rem;
 
   @media ${(props) => props.theme.mediaQueries.xs} {
-    padding: 16px;
+    padding: 1rem;
   }
 
   .title {

@@ -22,12 +22,12 @@ export const globalStyles = css`
   }
 
   .container {
-    padding: 32px;
+    padding: 2rem;
   }
 
   .section {
-    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
-    padding: 16px;
-    border-radius: 4px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0rem 0.0625rem 0.25rem;
+    padding: 1rem;
+    border-radius: 0.25rem;
   }
 `;
