@@ -194,7 +194,7 @@ const TodoList = ({ todos, setTodos, isFetchingTodos }: ComponentProps) => {
                   </div>
                 ))
               ) : (
-                'Sadly, there are no completed to-dos at the moment.'
+                'Sadly, there are no completed todos at the moment.'
               )}
             </Stack>
           </TodoTab>
