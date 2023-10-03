@@ -39,7 +39,7 @@ const TodoList = ({ todos, setTodos, isFetchingTodos }: ComponentProps) => {
   const { user } = useFirebaseAuth();
   const isSmallDevice = useMediaQuery('(max-width:600px)');
 
-  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+  const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
 

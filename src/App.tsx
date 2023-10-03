@@ -7,8 +7,6 @@ import useFirebaseAuth from './hooks/useFirebaseAuth';
 const App = () => {
   const { isLoading } = useFirebaseAuth();
 
-  console.log(isLoading);
-
   return (
     <>
       {isLoading ? (
