@@ -1,5 +1,13 @@
 import { useState, useEffect } from 'react';
-import { Tabs, Tab, Box, Checkbox, Stack, Skeleton } from '@mui/material';
+import {
+  Tabs,
+  Tab,
+  Box,
+  Checkbox,
+  Stack,
+  Skeleton,
+  useMediaQuery,
+} from '@mui/material';
 
 import TodoListStyled from './todoList.styled';
 import { TodoType } from '../../../common';
@@ -29,6 +37,7 @@ const TodoList = ({ todos, setTodos, isFetchingTodos }: ComponentProps) => {
   const [completedTodos, setCompletedTodos] = useState<TodoType[]>([]);
   const [uncompleteTodos, setUncompleteTodos] = useState<TodoType[]>([]);
   const { user } = useFirebaseAuth();
+  const isSmallDevice = useMediaQuery('(max-width:600px)');
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -86,9 +95,10 @@ const TodoList = ({ todos, setTodos, isFetchingTodos }: ComponentProps) => {
           value={value}
           onChange={handleTabChange}
           aria-label='Todos filter'
-          variant='scrollable'
-          scrollButtons
-          allowScrollButtonsMobile
+          centered={isSmallDevice ? false : true}
+          variant={isSmallDevice ? 'scrollable' : 'standard'}
+          scrollButtons={isSmallDevice ? true : false}
+          allowScrollButtonsMobile={isSmallDevice ? true : false}
         >
           <Tab label='All' {...a11yProps(0)} />
           <Tab label='Completed' {...a11yProps(1)} />

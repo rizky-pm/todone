@@ -130,7 +130,7 @@ const Main = () => {
                 gutterBottom
                 className='title'
               >
-                Task Tracking Made Effortless.
+                Task Tracking Made Effortless
               </Typography>
               <form onSubmit={handleSubmit(handleAddTodo)} noValidate>
                 <Stack spacing={1}>
