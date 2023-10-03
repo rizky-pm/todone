@@ -2,11 +2,12 @@ import styled from '@emotion/styled';
 
 type TodoListProps = {
   isAnyTodo: number;
+  isFetchingTodos: boolean;
 };
 
 const TodoListStyled = styled.div<TodoListProps>`
   height: 50vh;
-  overflow: auto;
+  overflow: ${(props) => (props.isFetchingTodos ? 'hidden' : 'auto')};
 
   .todo {
     padding: 0.75rem;

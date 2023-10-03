@@ -1,12 +1,24 @@
-import React from 'react';
 import Main from './pages/Main';
 import Navbar from './components/Navbar';
 
+import SplashScreen from './components/SplashScreen';
+import useFirebaseAuth from './hooks/useFirebaseAuth';
+
 const App = () => {
+  const { isLoading } = useFirebaseAuth();
+
+  console.log(isLoading);
+
   return (
     <>
-      <Navbar />
-      <Main />
+      {isLoading ? (
+        <SplashScreen />
+      ) : (
+        <>
+          <Navbar />
+          <Main />
+        </>
+      )}
     </>
   );
 };

@@ -16,7 +16,7 @@ import { fireauth } from '../../config/firebase';
 import UserIcon from '../../assets/UserIcon';
 
 const Navbar = () => {
-  const user = useFirebaseAuth();
+  const { user } = useFirebaseAuth();
 
   const isSmallDevice = useMediaQuery('(max-width:600px)');
 

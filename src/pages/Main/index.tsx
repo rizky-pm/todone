@@ -35,8 +35,9 @@ type TodoFormValues = {
 
 const Main = () => {
   const [todos, setTodos] = useState<TodoType[]>([]);
+  const [isFetchingTodos, setIsFetchingTodos] = useState<boolean>(true);
 
-  const user = useFirebaseAuth();
+  const { user, isLoading } = useFirebaseAuth();
   const isSmallDevice = useMediaQuery('(max-width:600px)');
 
   const { register, formState, handleSubmit, reset } = useForm<TodoFormValues>({
@@ -98,6 +99,7 @@ const Main = () => {
             const data = doc.data() as TodoType;
             todoList.push(data);
           });
+          setIsFetchingTodos(false);
           setTodos(todoList);
         }
       );
@@ -111,47 +113,60 @@ const Main = () => {
   return (
     <MainPage>
       <Container maxWidth='sm'>
-        <Stack spacing={2}>
-          <Stack spacing={2}>
-            <Typography
-              // variant='h6'
-              fontWeight={600}
-              variant={isSmallDevice ? 'h6' : 'h5'}
-              gutterBottom
-              className='title'
-            >
-              Task Tracking Made Effortless.
-            </Typography>
-            <form onSubmit={handleSubmit(handleAddTodo)} noValidate>
-              <Stack spacing={1}>
-                <TextField
-                  id='todoTitle'
-                  variant='outlined'
-                  fullWidth
-                  size='small'
-                  placeholder='Your todo'
-                  {...register('title', {
-                    required: 'Todo is required',
-                  })}
-                  error={!!errors.title}
-                  helperText={errors.title?.message}
-                />
-                <Button
-                  type='submit'
-                  variant='contained'
-                  fullWidth
-                  disabled={isSubmitting}
-                >
-                  Add Todo
-                </Button>
-              </Stack>
-            </form>
-          </Stack>
-
-          <div className='section'>
-            <TodoList todos={todos} setTodos={setTodos} />
+        {isLoading ? (
+          <div
+            style={{
+              textAlign: 'center',
+            }}
+          >
+            <h1>Loading ...</h1>
           </div>
-        </Stack>
+        ) : (
+          <Stack spacing={2}>
+            <Stack spacing={2}>
+              <Typography
+                fontWeight={600}
+                variant={isSmallDevice ? 'h6' : 'h5'}
+                gutterBottom
+                className='title'
+              >
+                Task Tracking Made Effortless.
+              </Typography>
+              <form onSubmit={handleSubmit(handleAddTodo)} noValidate>
+                <Stack spacing={1}>
+                  <TextField
+                    id='todoTitle'
+                    variant='outlined'
+                    fullWidth
+                    size='small'
+                    placeholder='Your todo'
+                    {...register('title', {
+                      required: 'Todo is required',
+                    })}
+                    error={!!errors.title}
+                    helperText={errors.title?.message}
+                  />
+                  <Button
+                    type='submit'
+                    variant='contained'
+                    fullWidth
+                    disabled={isSubmitting}
+                  >
+                    Add Todo
+                  </Button>
+                </Stack>
+              </form>
+            </Stack>
+
+            <div className='section'>
+              <TodoList
+                todos={todos}
+                setTodos={setTodos}
+                isFetchingTodos={isFetchingTodos}
+              />
+            </div>
+          </Stack>
+        )}
       </Container>
       <SignInModal />
       <SignUpModal />
