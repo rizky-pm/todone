@@ -80,6 +80,7 @@ const Main = () => {
 
   useEffect(() => {
     if (user === null) {
+      setIsFetchingTodos(false);
       const todoLocal = localStorage.getItem('todos');
       setTodos(todoLocal ? JSON.parse(todoLocal) : []);
     }
@@ -109,6 +110,8 @@ const Main = () => {
       };
     }
   }, [user]);
+
+  console.log(isFetchingTodos);
 
   return (
     <MainPage>
