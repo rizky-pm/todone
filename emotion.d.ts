@@ -6,6 +6,8 @@ declare module '@emotion/react' {
       black: string;
       white: string;
       primary: string;
+      primaryDark: string;
+      primaryLight: string;
     };
     mediaQueries: {
       xs: string;

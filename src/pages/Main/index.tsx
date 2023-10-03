@@ -111,8 +111,6 @@ const Main = () => {
     }
   }, [user]);
 
-  console.log(isFetchingTodos);
-
   return (
     <MainPage>
       <Container maxWidth='sm'>

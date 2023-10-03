@@ -3,6 +3,7 @@ import Navbar from './components/Navbar';
 
 import SplashScreen from './components/SplashScreen';
 import useFirebaseAuth from './hooks/useFirebaseAuth';
+import Footer from './components/Footer';
 
 const App = () => {
   const { isLoading } = useFirebaseAuth();
@@ -15,6 +16,7 @@ const App = () => {
         <>
           <Navbar />
           <Main />
+          <Footer />
         </>
       )}
     </>
