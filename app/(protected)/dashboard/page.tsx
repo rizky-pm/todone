@@ -1,8 +1,10 @@
+import FilterActions from '@/components/FilterActions';
 import Summary from '@/components/Summary';
 
 const DashboardPage = () => {
   return (
-    <section>
+    <section className='flex flex-col gap-4 mt-6'>
+      <FilterActions />
       <Summary />
     </section>
   );
