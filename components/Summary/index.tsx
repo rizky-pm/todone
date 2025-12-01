@@ -10,8 +10,8 @@ const Summary = () => {
           <span className='font-bold text-2xl'>24</span>
         </div>
 
-        <div className='bg-blue-200 p-2 rounded-lg'>
-          <ListTodo className='text-blue-600' />
+        <div className='bg-blue-200 p-2 rounded-lg w-10 h-10 flex justify-center items-center'>
+          <ListTodo className='text-blue-600 w-5 h-5' />
         </div>
       </div>
 
@@ -21,8 +21,8 @@ const Summary = () => {
           <span className='font-bold text-2xl'>12</span>
         </div>
 
-        <div className='bg-green-200 p-2 rounded-lg'>
-          <Check className='text-green-600' />
+        <div className='bg-green-200 p-2 rounded-lg w-10 h-10 flex justify-center items-center'>
+          <Check className='text-green-600 w-5 h-5' />
         </div>
       </div>
 
@@ -32,8 +32,8 @@ const Summary = () => {
           <span className='font-bold text-2xl'>24</span>
         </div>
 
-        <div className='bg-yellow-200 p-2 rounded-lg'>
-          <Clock3 className='text-yellow-600' />
+        <div className='bg-yellow-200 p-2 rounded-lg w-10 h-10 flex justify-center items-center'>
+          <Clock3 className='text-yellow-600 w-5 h-5' />
         </div>
       </div>
 
@@ -43,8 +43,8 @@ const Summary = () => {
           <span className='font-bold text-2xl'>24</span>
         </div>
 
-        <div className='bg-red-200 p-2 rounded-lg'>
-          <CircleAlert className='text-red-600' />
+        <div className='bg-red-200 p-2 rounded-lg w-10 h-10 flex justify-center items-center'>
+          <CircleAlert className='text-red-600 w-5 h-5' />
         </div>
       </div>
     </div>
