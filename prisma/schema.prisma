@@ -36,10 +36,12 @@ model User {
 // =======================================
 
 model Task {
-  id          String      @id @default(uuid())
+  id          String       @id @default(uuid())
   title       String
   description String?
-  status      TaskStatus  @default(INCOMPLETE)
+  status      TaskStatus   @default(INCOMPLETE)
+
+  priority    TaskPriority @default(MEDIUM) // <-- added
 
   userId      String
   categoryId  String?
@@ -51,10 +53,18 @@ model Task {
   category    Category?    @relation(fields: [categoryId], references: [id])
 }
 
+
 enum TaskStatus {
   INCOMPLETE
   COMPLETE
 }
+
+enum TaskPriority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
 
 // =======================================
 // CATEGORIES
