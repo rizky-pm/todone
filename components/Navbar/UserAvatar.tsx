@@ -13,23 +13,20 @@ import { useMemo } from 'react';
 import { getInitials } from '@/app/lib/string';
 import { useSignOutMutation } from '@/app/services/auth';
 import { redirect } from 'next/navigation';
+import { useAuthStore } from '@/app/store/auth.store';
 
-interface IProps {
-  fullName: string;
-}
-
-const UserAvatar = (props: IProps) => {
-  const { fullName } = props;
+const UserAvatar = () => {
+  const user = useAuthStore((store) => store.user);
 
   const { mutateAsync, isPending } = useSignOutMutation();
 
   const fullNameFallback = useMemo(() => {
-    if (!fullName) return null;
+    if (!user) return null;
 
-    const fallback = getInitials(fullName);
+    const fallback = getInitials(user.fullName);
 
     return fallback;
-  }, [fullName]);
+  }, [user]);
 
   const signOut = () => {
     mutateAsync(undefined, {

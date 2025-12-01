@@ -2,11 +2,8 @@ import { Plus } from 'lucide-react';
 import { Button } from '../ui/button';
 import { TypographySmall } from '../ui/typography';
 import UserAvatar from './UserAvatar';
-import { getCurrentUser } from '@/app/lib/auth';
 
-const Navbar = async () => {
-  const user = await getCurrentUser();
-
+const Navbar = () => {
   return (
     <nav className='flex justify-between items-center py-4'>
       <div className='flex flex-col'>
@@ -19,7 +16,7 @@ const Navbar = async () => {
           <Plus />
           Add Task
         </Button>
-        <UserAvatar fullName={user?.fullName || ''} />
+        <UserAvatar />
       </div>
     </nav>
   );
