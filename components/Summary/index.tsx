@@ -1,6 +1,9 @@
+'use client';
+
 import { Check, CircleAlert, Clock3, ListTodo } from 'lucide-react';
 import { TypographyMuted } from '../ui/typography';
 import { ISummary } from '@/app/types';
+import { useGetTaskSummaryQuery } from '@/app/services/tasks';
 
 interface IInitialData {
   data: ISummary;
@@ -9,13 +12,16 @@ interface IInitialData {
 const Summary = (props: IInitialData) => {
   const { data } = props;
   const { completed, incomplete, overdue, total } = data;
+  const { data: summaryResponse } = useGetTaskSummaryQuery(data);
 
   return (
     <div className='flex gap-4'>
       <div className='shadow-sm rounded-lg w-1/4 p-4  flex justify-between items-center'>
         <div className='flex flex-col'>
           <TypographyMuted>Total tasks</TypographyMuted>
-          <span className='font-bold text-2xl'>{total}</span>
+          <span className='font-bold text-2xl'>
+            {summaryResponse.data.total ?? total}
+          </span>
         </div>
 
         <div className='bg-blue-200 p-2 rounded-lg w-10 h-10 flex justify-center items-center'>
@@ -26,7 +32,9 @@ const Summary = (props: IInitialData) => {
       <div className='shadow-sm rounded-lg w-1/4 p-4  flex justify-between items-center'>
         <div className='flex flex-col'>
           <TypographyMuted>Completed</TypographyMuted>
-          <span className='font-bold text-2xl'>{completed}</span>
+          <span className='font-bold text-2xl'>
+            {summaryResponse.data.completed ?? completed}
+          </span>
         </div>
 
         <div className='bg-green-200 p-2 rounded-lg w-10 h-10 flex justify-center items-center'>
@@ -37,7 +45,9 @@ const Summary = (props: IInitialData) => {
       <div className='shadow-sm rounded-lg w-1/4 p-4  flex justify-between items-center'>
         <div className='flex flex-col'>
           <TypographyMuted>In Progress</TypographyMuted>
-          <span className='font-bold text-2xl'>{incomplete}</span>
+          <span className='font-bold text-2xl'>
+            {summaryResponse.data.incomplete ?? incomplete}
+          </span>
         </div>
 
         <div className='bg-yellow-200 p-2 rounded-lg w-10 h-10 flex justify-center items-center'>
@@ -48,7 +58,9 @@ const Summary = (props: IInitialData) => {
       <div className='shadow-sm rounded-lg w-1/4 p-4  flex justify-between items-center'>
         <div className='flex flex-col'>
           <TypographyMuted>Overdue</TypographyMuted>
-          <span className='font-bold text-2xl'>{overdue}</span>
+          <span className='font-bold text-2xl'>
+            {summaryResponse.data.overdue ?? overdue}
+          </span>
         </div>
 
         <div className='bg-red-200 p-2 rounded-lg w-10 h-10 flex justify-center items-center'>

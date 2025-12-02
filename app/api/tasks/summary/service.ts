@@ -7,7 +7,7 @@ export const getSummary = async () => {
   const user = await getCurrentUser();
 
   if (!user) {
-    if (!user) throw new Error('Unauthorized');
+    throw new Error('Unauthorized');
   }
 
   const now = dayjs().toDate();
