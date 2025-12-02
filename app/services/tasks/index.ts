@@ -60,14 +60,16 @@ export const useGetTaskQuery = (params: {
 
       return response.data;
     },
-    enabled: params.page > 1,
     placeholderData: keepPreviousData,
-    initialData: {
-      success: true,
-      message: 'Sucess retrieving task list',
-      data: params.initialData,
-      meta: params.meta,
-    },
+    initialData:
+      params.page === 1
+        ? {
+            success: true,
+            message: 'Sucess retrieving task list',
+            data: params.initialData,
+            meta: params.meta,
+          }
+        : undefined,
     staleTime: 5000,
   });
 };
