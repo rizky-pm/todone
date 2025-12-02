@@ -44,6 +44,19 @@ export function TypographyH3({ children, className }: IProps) {
   );
 }
 
+export function TypographyH4({ children, className }: IProps) {
+  return (
+    <h4
+      className={cn(
+        'scroll-m-20 text-xl font-semibold tracking-tight',
+        className
+      )}
+    >
+      {children}
+    </h4>
+  );
+}
+
 export function TypographyP({ children, className }: IProps) {
   return <p className={cn('leading-7 text-sm', className)}>{children}</p>;
 }
