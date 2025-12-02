@@ -44,8 +44,6 @@ const SignInForm = () => {
   });
 
   const onSignIn = async (values: TypeSignInSchema) => {
-    console.log(values);
-
     mutateAsync(values, {
       onSuccess: () => {
         toast.success('Sign in success, redirecting to dashboard page', {
