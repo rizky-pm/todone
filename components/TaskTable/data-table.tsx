@@ -25,26 +25,37 @@ import {
   ChevronsLeft,
   ChevronsRight,
 } from 'lucide-react';
+import { IPaginationMeta } from '@/app/types';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  meta: IPaginationMeta;
+  onPageChange: (pageIndex: number) => void;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  meta,
+  onPageChange,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = useState({});
 
   const table = useReactTable({
     data,
     columns,
+    pageCount: meta.totalPages, // important
+    manualPagination: true, // tell TanStack: backend pagination
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     onRowSelectionChange: setRowSelection,
     state: {
       rowSelection,
+      pagination: {
+        pageIndex: meta.page - 1, // tanstack uses zero-based
+        pageSize: meta.limit,
+      },
     },
   });
 
@@ -117,8 +128,8 @@ export function DataTable<TData, TValue>({
             variant='outline'
             size='icon'
             className='hidden size-8 lg:flex'
-            onClick={() => table.setPageIndex(0)}
-            disabled={!table.getCanPreviousPage()}
+            onClick={() => onPageChange(1)}
+            disabled={!meta.hasPrev}
           >
             <span className='sr-only'>Go to first page</span>
             <ChevronsLeft />
@@ -127,8 +138,8 @@ export function DataTable<TData, TValue>({
             variant='outline'
             size='icon'
             className='size-8'
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
+            onClick={() => onPageChange(meta.page - 1)}
+            disabled={!meta.hasPrev}
           >
             <span className='sr-only'>Go to previous page</span>
             <ChevronLeft />
@@ -137,8 +148,8 @@ export function DataTable<TData, TValue>({
             variant='outline'
             size='icon'
             className='size-8'
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
+            onClick={() => onPageChange(meta.page + 1)}
+            disabled={!meta.hasNext}
           >
             <span className='sr-only'>Go to next page</span>
             <ChevronRight />
@@ -147,8 +158,8 @@ export function DataTable<TData, TValue>({
             variant='outline'
             size='icon'
             className='hidden size-8 lg:flex'
-            onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-            disabled={!table.getCanNextPage()}
+            onClick={() => onPageChange(meta.totalPages - 1)}
+            disabled={!meta.hasNext}
           >
             <span className='sr-only'>Go to last page</span>
             <ChevronsRight />

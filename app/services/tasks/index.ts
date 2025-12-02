@@ -1,10 +1,23 @@
 import { api } from '@/app/api';
-import { IBaseResponse, ISummary } from '@/app/types';
-import { useQuery } from '@tanstack/react-query';
-import type { Task } from '@/src/generated/client';
+import { IBaseResponse, IPaginationMeta, ISummary } from '@/app/types';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import type { Prisma } from '@/src/generated/client';
+
+export type TaskWithCategory = Prisma.TaskGetPayload<{
+  include: {
+    category: {
+      select: {
+        id: true;
+        name: true;
+        color: true;
+      };
+    };
+  };
+}>;
 
 interface IGetTasksResponse extends IBaseResponse {
-  data: Task[];
+  data: TaskWithCategory[];
+  meta: IPaginationMeta;
 }
 
 interface IGetTaskSummaryResponse extends IBaseResponse {
@@ -30,17 +43,31 @@ export const useGetTaskSummaryQuery = (initialData: ISummary) => {
   });
 };
 
-export const useGetTaskQuery = (params: { page: number; limit: number }) => {
+export const useGetTaskQuery = (params: {
+  page: number;
+  limit: number;
+  initialData: TaskWithCategory[];
+  meta: IPaginationMeta;
+}) => {
   return useQuery({
     queryKey: ['task.get-all', params.page, params.limit],
     queryFn: async () => {
       const { page, limit } = params;
 
       const response = await api.get<IGetTasksResponse>(
-        `api/tasks?page${page}&limit=${limit}`
+        `api/tasks?page=${page}&limit=${limit}`
       );
 
       return response.data;
     },
+    enabled: params.page > 1,
+    placeholderData: keepPreviousData,
+    initialData: {
+      success: true,
+      message: 'Sucess retrieving task list',
+      data: params.initialData,
+      meta: params.meta,
+    },
+    staleTime: 5000,
   });
 };
