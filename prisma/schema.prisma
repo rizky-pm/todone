@@ -40,6 +40,7 @@ model Task {
   title       String
   description String?
   status      TaskStatus   @default(INCOMPLETE)
+  dueDate     DateTime?
 
   priority    TaskPriority @default(MEDIUM) // <-- added
 

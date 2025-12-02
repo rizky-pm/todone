@@ -6,6 +6,11 @@ import 'dotenv/config';
 async function main() {
   console.log('Seeding development data...');
 
+  // Clear existing data to guarantee a clean test DB
+  await prisma.task.deleteMany();
+  await prisma.category.deleteMany();
+  await prisma.user.deleteMany();
+
   // ===========================================
   // 1. CREATE USERS
   // ===========================================
@@ -31,6 +36,16 @@ async function main() {
   // ===========================================
   const categories = [];
 
+  // Global Categories
+  await prisma.category.createMany({
+    data: [
+      { name: 'General', color: '#808080' },
+      { name: 'Work', color: '#1E90FF' },
+      { name: 'Personal', color: '#32CD32' },
+    ],
+  });
+
+  // Categories belong to user
   for (const user of users) {
     for (let i = 0; i < 3; i++) {
       const category = await prisma.category.create({
@@ -59,6 +74,10 @@ async function main() {
           title: faker.lorem.sentence(),
           description: faker.lorem.paragraph(),
           status: faker.helpers.arrayElement(['INCOMPLETE', 'COMPLETE']),
+          dueDate: faker.date.between({
+            from: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // past 7 days
+            to: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // next 7 days
+          }),
           priority: faker.helpers.arrayElement(['LOW', 'MEDIUM', 'HIGH']),
           userId: category.userId!, // each category belongs to exactly one user
           categoryId: category.id,
