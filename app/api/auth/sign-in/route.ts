@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const match = comparePassword(password, user.password);
+    const match = await comparePassword(password, user.password);
 
     if (!match) {
       return NextResponse.json(
