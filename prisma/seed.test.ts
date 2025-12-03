@@ -76,6 +76,7 @@ async function main() {
       priority: TaskPriority.LOW,
       userId: testUser.id,
       categoryId: categoryPersonal.id,
+      completedAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
     },
   });
 
@@ -88,6 +89,7 @@ async function main() {
       priority: TaskPriority.MEDIUM,
       userId: testUser.id,
       categoryId: categoryWork.id,
+      completedAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
     },
   });
 

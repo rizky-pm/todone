@@ -78,6 +78,12 @@ async function main() {
             from: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // past 7 days
             to: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // next 7 days
           }),
+          completedAt: faker.helpers.maybe(() =>
+            faker.date.between({
+              from: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // past 7 days
+              to: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // next 7 days
+            })
+          ),
           priority: faker.helpers.arrayElement(['LOW', 'MEDIUM', 'HIGH']),
           userId: category.userId!, // each category belongs to exactly one user
           categoryId: category.id,
