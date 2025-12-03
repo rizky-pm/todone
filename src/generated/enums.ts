@@ -11,7 +11,8 @@
 
 export const TaskStatus = {
   INCOMPLETE: 'INCOMPLETE',
-  COMPLETE: 'COMPLETE'
+  COMPLETE: 'COMPLETE',
+  OVERDUE: 'OVERDUE'
 } as const
 
 export type TaskStatus = (typeof TaskStatus)[keyof typeof TaskStatus]

@@ -58,6 +58,7 @@ model Task {
 enum TaskStatus {
   INCOMPLETE
   COMPLETE
+  OVERDUE
 }
 
 enum TaskPriority {

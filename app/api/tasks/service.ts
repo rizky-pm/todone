@@ -1,5 +1,6 @@
 import { getCurrentUser } from '@/app/lib/auth';
 import { prisma } from '@/app/lib/db';
+import { Prisma } from '@/src/generated/client';
 import { TaskPriority, TaskStatus } from '@/src/generated/enums';
 
 export const getTasks = async ({
@@ -27,15 +28,19 @@ export const getTasks = async ({
 
   const skip = (page - 1) * limit;
 
-  const whereOptions: {
-    userId: string;
-    status?: TaskStatus;
-    categoryId?: string;
-    priority?: TaskPriority;
-  } = { userId: user.id };
+  const whereOptions: Prisma.TaskWhereInput = {
+    userId: user.id,
+  };
 
-  if (status) {
-    whereOptions.status = status;
+  if (status === TaskStatus.COMPLETE) {
+    whereOptions.status = TaskStatus.COMPLETE;
+    whereOptions.OR = [{ dueDate: null }, { dueDate: { gte: new Date() } }];
+  } else if (status === TaskStatus.INCOMPLETE) {
+    whereOptions.status = TaskStatus.INCOMPLETE;
+    whereOptions.OR = [{ dueDate: null }, { dueDate: { gte: new Date() } }];
+  } else if (status === 'OVERDUE') {
+    whereOptions.status = TaskStatus.INCOMPLETE;
+    whereOptions.dueDate = { lt: new Date() };
   }
 
   if (categoryId) {

@@ -3,6 +3,7 @@ import { IBaseResponse, IPaginationMeta, ISummary } from '@/app/types';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import type { Prisma, TaskPriority, TaskStatus } from '@/src/generated/client';
 import { IFilterState } from '@/app/store/filter.store';
+import _ from 'lodash';
 
 export type TaskWithCategory = Prisma.TaskGetPayload<{
   include: {
@@ -62,8 +63,8 @@ export const useGetTaskQuery = (params: {
           page: page,
           limit: limit,
           categoryId: filter.category,
-          status: filter.status,
-          priority: filter.priority,
+          status: _.toUpper(filter.status),
+          priority: _.toUpper(filter.priority),
         },
       });
 

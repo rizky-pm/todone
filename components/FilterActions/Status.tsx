@@ -26,8 +26,8 @@ const SelectStatus = () => {
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            <SelectItem value='in-progress'>In Progess</SelectItem>
-            <SelectItem value='completed'>Completed</SelectItem>
+            <SelectItem value='incomplete'>In Progess</SelectItem>
+            <SelectItem value='complete'>Completed</SelectItem>
             <SelectItem value='overdue'>Overdue</SelectItem>
           </SelectGroup>
         </SelectContent>
