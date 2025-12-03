@@ -1,3 +1,4 @@
+import FilterActions from '../FilterActions';
 import { TypographyH4 } from '../ui/typography';
 import TaskTableClient from './table';
 import { getTasks } from '@/app/api/tasks/service';
@@ -7,7 +8,11 @@ const TaskTable = async () => {
 
   return (
     <div className='shadow-sm p-4 rounded-lg'>
-      <TypographyH4>Tasks</TypographyH4>
+      <div className='flex justify-between items-center'>
+        <TypographyH4>Tasks</TypographyH4>
+
+        <FilterActions />
+      </div>
 
       <TaskTableClient data={taskList.tasks} meta={taskList.meta} />
     </div>
