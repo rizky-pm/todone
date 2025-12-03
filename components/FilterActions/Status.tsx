@@ -1,3 +1,5 @@
+'use client';
+
 import {
   Select,
   SelectContent,
@@ -8,23 +10,25 @@ import {
 } from '@/components/ui/select';
 
 import { TypographySmall } from '../ui/typography';
+import { useFilterStore } from '@/app/store/filter.store';
 
 const SelectStatus = () => {
+  const selectedStatus = useFilterStore((store) => store.status);
+  const setStatus = useFilterStore((store) => store.setStatus);
+
   return (
     <div className='flex items-center gap-2'>
       <TypographySmall>Status</TypographySmall>
 
-      <Select>
+      <Select value={selectedStatus || ''} onValueChange={setStatus}>
         <SelectTrigger className='w-[150px]'>
           <SelectValue placeholder='All Status' />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            <SelectItem value='apple'>Apple</SelectItem>
-            <SelectItem value='banana'>Banana</SelectItem>
-            <SelectItem value='blueberry'>Blueberry</SelectItem>
-            <SelectItem value='grapes'>Grapes</SelectItem>
-            <SelectItem value='pineapple'>Pineapple</SelectItem>
+            <SelectItem value='in-progress'>In Progess</SelectItem>
+            <SelectItem value='completed'>Completed</SelectItem>
+            <SelectItem value='overdue'>Overdue</SelectItem>
           </SelectGroup>
         </SelectContent>
       </Select>

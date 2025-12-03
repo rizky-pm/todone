@@ -1,7 +1,8 @@
 import { api } from '@/app/api';
 import { IBaseResponse, IPaginationMeta, ISummary } from '@/app/types';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
-import type { Prisma } from '@/src/generated/client';
+import type { Prisma, TaskPriority, TaskStatus } from '@/src/generated/client';
+import { IFilterState } from '@/app/store/filter.store';
 
 export type TaskWithCategory = Prisma.TaskGetPayload<{
   include: {
@@ -48,15 +49,23 @@ export const useGetTaskQuery = (params: {
   limit: number;
   initialData: TaskWithCategory[];
   meta: IPaginationMeta;
+  filter: Pick<IFilterState, 'category' | 'priority' | 'status'>;
+  applySignal: number;
 }) => {
   return useQuery({
-    queryKey: ['task.get-all', params.page, params.limit],
+    queryKey: ['task.get-all', params.page, params.limit, params.applySignal],
     queryFn: async () => {
-      const { page, limit } = params;
+      const { page, limit, filter } = params;
 
-      const response = await api.get<IGetTasksResponse>(
-        `api/tasks?page=${page}&limit=${limit}`
-      );
+      const response = await api.get<IGetTasksResponse>(`api/tasks`, {
+        params: {
+          page: page,
+          limit: limit,
+          categoryId: filter.category,
+          status: filter.status,
+          priority: filter.priority,
+        },
+      });
 
       return response.data;
     },
@@ -70,6 +79,5 @@ export const useGetTaskQuery = (params: {
             meta: params.meta,
           }
         : undefined,
-    staleTime: 5000,
   });
 };

@@ -5,6 +5,7 @@ import { columns } from './columns';
 import { DataTable } from './data-table';
 import { TaskWithCategory, useGetTaskQuery } from '@/app/services/tasks';
 import { IPaginationMeta } from '@/app/types';
+import { useFilterStore } from '@/app/store/filter.store';
 
 interface IInitialData {
   data: TaskWithCategory[];
@@ -13,14 +14,24 @@ interface IInitialData {
 
 const TaskTableClient = (props: IInitialData) => {
   const { data, meta } = props;
-
   const [pageIndex, setPageIndex] = useState(1);
+
+  const category = useFilterStore((store) => store.category);
+  const status = useFilterStore((store) => store.status);
+  const priority = useFilterStore((store) => store.priority);
+  const applySignal = useFilterStore((store) => store.applySignal);
 
   const queryTask = useGetTaskQuery({
     page: pageIndex,
     limit: 10,
     initialData: data,
     meta,
+    filter: {
+      category,
+      status,
+      priority,
+    },
+    applySignal,
   });
 
   const tasks = queryTask.data ?? { data, meta };

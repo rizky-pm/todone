@@ -1,13 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getTasks } from './service';
+import { parseTaskPriority, parseTaskStatus } from '@/app/lib/parsers';
 
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const page = parseInt(searchParams.get('page') || '1', 10);
     const limit = parseInt(searchParams.get('limit') || '10', 10);
+    const categoryId = searchParams.get('categoryId') || undefined;
+    const status = parseTaskStatus(searchParams.get('status'));
+    const priority = parseTaskPriority(searchParams.get('priority'));
 
-    const { tasks, meta } = await getTasks({ page, limit });
+    const { tasks, meta } = await getTasks({
+      page,
+      limit,
+      categoryId,
+      status,
+      priority,
+    });
 
     return NextResponse.json(
       {

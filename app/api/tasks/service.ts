@@ -1,12 +1,19 @@
 import { getCurrentUser } from '@/app/lib/auth';
 import { prisma } from '@/app/lib/db';
+import { TaskPriority, TaskStatus } from '@/src/generated/enums';
 
 export const getTasks = async ({
   page,
   limit,
+  categoryId,
+  status,
+  priority,
 }: {
   page: number;
   limit: number;
+  status?: TaskStatus | undefined;
+  categoryId?: string | undefined;
+  priority?: TaskPriority | undefined;
 }) => {
   const user = await getCurrentUser();
 
@@ -20,9 +27,28 @@ export const getTasks = async ({
 
   const skip = (page - 1) * limit;
 
+  const whereOptions: {
+    userId: string;
+    status?: TaskStatus;
+    categoryId?: string;
+    priority?: TaskPriority;
+  } = { userId: user.id };
+
+  if (status) {
+    whereOptions.status = status;
+  }
+
+  if (categoryId) {
+    whereOptions.categoryId = categoryId;
+  }
+
+  if (priority) {
+    whereOptions.priority = priority;
+  }
+
   const [tasks, total] = await Promise.all([
     prisma.task.findMany({
-      where: { userId: user.id },
+      where: whereOptions,
       skip,
       take: limit,
       orderBy: {
@@ -38,7 +64,7 @@ export const getTasks = async ({
         },
       },
     }),
-    prisma.task.count({ where: { userId: user.id } }),
+    prisma.task.count({ where: whereOptions }),
   ]);
 
   const totalPages = Math.ceil(total / limit);
