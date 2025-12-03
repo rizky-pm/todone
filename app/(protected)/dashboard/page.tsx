@@ -8,8 +8,8 @@ const DashboardPage = async () => {
 
   return (
     <section className='flex flex-col gap-8 mt-6'>
-      <FilterActions />
       <Summary data={summary} />
+      <FilterActions />
       <TaskTable />
     </section>
   );
