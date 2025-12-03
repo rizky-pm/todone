@@ -30,7 +30,7 @@ export const columns: ColumnDef<TaskWithCategory>[] = [
       />
     ),
     cell: ({ row }) => (
-      <div className='w-10'>
+      <div className='w-4'>
         <Checkbox
           checked={row.getIsSelected()}
           onCheckedChange={(value) => row.toggleSelected(!!value)}
@@ -45,7 +45,7 @@ export const columns: ColumnDef<TaskWithCategory>[] = [
     accessorKey: 'title',
     header: 'Title',
     cell: ({ row }) => {
-      return <p className='truncate w-[300px]'>{row.original.title}</p>;
+      return <p className='truncate w-[200px]'>{row.original.title}</p>;
     },
   },
   {
@@ -59,7 +59,7 @@ export const columns: ColumnDef<TaskWithCategory>[] = [
       }
 
       return (
-        <div className='flex items-center gap-2 w-[150px]'>
+        <div className='flex items-center gap-2 w-[100px]'>
           <span
             className='w-3 h-3 rounded-full'
             style={{ backgroundColor: category.color }}
@@ -67,17 +67,6 @@ export const columns: ColumnDef<TaskWithCategory>[] = [
           <span>{category.name}</span>
         </div>
       );
-    },
-  },
-  {
-    accessorKey: 'dueDate',
-    header: 'Due Date',
-    cell: ({ row }) => {
-      const readableDate = dayjs(row.original.dueDate).format(
-        'D MMM YYYY, HH:mm'
-      );
-
-      return <p className={`w-[150px]`}>{readableDate}</p>;
     },
   },
   {
@@ -113,7 +102,6 @@ export const columns: ColumnDef<TaskWithCategory>[] = [
       );
     },
   },
-
   {
     accessorKey: 'priority',
     header: 'Priority',
@@ -139,6 +127,24 @@ export const columns: ColumnDef<TaskWithCategory>[] = [
       }
 
       return <Badge>{value}</Badge>;
+    },
+  },
+  {
+    accessorKey: 'dueDate',
+    header: 'Due Date',
+    cell: ({ row }) => {
+      const readableDate = dayjs(row.original.dueDate).format(
+        'MMM D, YYYY - HH:mm'
+      );
+      const dueDate = dayjs(row.original.dueDate);
+      const now = dayjs();
+      const isOverdue = now.isAfter(dueDate);
+
+      return (
+        <p className={`w-[150px] ${isOverdue ? 'text-red-600' : ''}`}>
+          {readableDate}
+        </p>
+      );
     },
   },
   {
