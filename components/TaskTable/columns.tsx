@@ -49,13 +49,6 @@ export const columns: ColumnDef<TaskWithCategory>[] = [
     },
   },
   {
-    accessorKey: 'description',
-    header: 'Description',
-    cell: ({ row }) => {
-      return <p className='truncate w-[400px]'>{row.original.description}</p>;
-    },
-  },
-  {
     accessorKey: 'category',
     header: 'Category',
     cell: ({ row }) => {
@@ -83,8 +76,6 @@ export const columns: ColumnDef<TaskWithCategory>[] = [
       const readableDate = dayjs(row.original.dueDate).format(
         'D MMM YYYY, HH:mm'
       );
-
-      const isOverdue = dayjs(row.original.dueDate).isBefore(dayjs());
 
       return <p className={`w-[150px]`}>{readableDate}</p>;
     },
@@ -148,28 +139,6 @@ export const columns: ColumnDef<TaskWithCategory>[] = [
     },
   },
   {
-    accessorKey: 'createdAt',
-    header: 'Created At',
-    cell: ({ row }) => {
-      const readableDate = dayjs(row.original.createdAt).format(
-        'D MMM YYYY, HH:mm'
-      );
-
-      return <p className='w-[150px]'>{readableDate}</p>;
-    },
-  },
-  {
-    accessorKey: 'updatedAt',
-    header: 'Updated At',
-    cell: ({ row }) => {
-      const readableDate = dayjs(row.original.updatedAt).format(
-        'D MMM YYYY, HH:mm'
-      );
-
-      return <p className='truncate w-[150px]'>{readableDate}</p>;
-    },
-  },
-  {
     id: 'actions',
     // header: () => <div className='text-right'>Amount</div>,
     cell: ({ row }) => {
@@ -189,6 +158,7 @@ export const columns: ColumnDef<TaskWithCategory>[] = [
               <DropdownMenuSeparator />
               <DropdownMenuItem>Edit</DropdownMenuItem>
               <DropdownMenuItem>Delete</DropdownMenuItem>
+              <DropdownMenuItem>Mark as Complete</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
