@@ -1,7 +1,9 @@
 import { getCurrentUser } from '@/app/lib/auth';
 import { prisma } from '@/app/lib/db';
+import { TaskStatus } from '@/app/types';
 import { Prisma } from '@/src/generated/client';
-import { TaskPriority, TaskStatus } from '@/src/generated/enums';
+import { TaskPriority } from '@/src/generated/enums';
+import dayjs from 'dayjs';
 
 export const getTasks = async ({
   page,
@@ -32,15 +34,22 @@ export const getTasks = async ({
     userId: user.id,
   };
 
-  if (status === TaskStatus.COMPLETE) {
-    whereOptions.status = TaskStatus.COMPLETE;
-    whereOptions.OR = [{ dueDate: null }, { dueDate: { gte: new Date() } }];
-  } else if (status === TaskStatus.INCOMPLETE) {
-    whereOptions.status = TaskStatus.INCOMPLETE;
-    whereOptions.OR = [{ dueDate: null }, { dueDate: { gte: new Date() } }];
-  } else if (status === 'OVERDUE') {
-    whereOptions.status = TaskStatus.INCOMPLETE;
-    whereOptions.dueDate = { lt: new Date() };
+  const now = dayjs().toDate();
+
+  switch (status) {
+    case TaskStatus.COMPLETE:
+      whereOptions.completedAt = { not: null };
+      break;
+
+    case TaskStatus.INCOMPLETE:
+      whereOptions.completedAt = null;
+      whereOptions.dueDate = { gte: now };
+      break;
+
+    case TaskStatus.OVERDUE:
+      whereOptions.completedAt = null;
+      whereOptions.dueDate = { lt: now };
+      break;
   }
 
   if (categoryId) {

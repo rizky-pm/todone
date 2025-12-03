@@ -1,12 +1,16 @@
-import { TaskStatus, TaskPriority } from '@/src/generated/enums';
+import { TaskPriority } from '@/src/generated/enums';
+import { TaskStatus } from '@/app/types';
 
 export const parseTaskStatus = (
   value: string | null
 ): TaskStatus | undefined => {
   if (!value) return undefined;
 
-  const validValues = Object.values(TaskStatus) as string[];
-  return validValues.includes(value) ? (value as TaskStatus) : undefined;
+  if (Object.hasOwn(TaskStatus, value)) {
+    return TaskStatus[value as keyof typeof TaskStatus];
+  }
+
+  return undefined;
 };
 
 export const parseTaskPriority = (

@@ -1,7 +1,7 @@
 import { api } from '@/app/api';
 import { IBaseResponse, IPaginationMeta, ISummary } from '@/app/types';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
-import type { Prisma, TaskPriority, TaskStatus } from '@/src/generated/client';
+import type { Prisma } from '@/src/generated/client';
 import { IFilterState } from '@/app/store/filter.store';
 import _ from 'lodash';
 

@@ -73,7 +73,6 @@ async function main() {
         data: {
           title: faker.lorem.sentence(),
           description: faker.lorem.paragraph(),
-          status: faker.helpers.arrayElement(['INCOMPLETE', 'COMPLETE']),
           dueDate: faker.date.between({
             from: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // past 7 days
             to: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // next 7 days

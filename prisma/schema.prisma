@@ -39,8 +39,7 @@ model Task {
   id          String       @id @default(uuid())
   title       String
   description String?
-  status      TaskStatus   @default(INCOMPLETE)
-  dueDate     DateTime?
+  dueDate     DateTime
 
   priority    TaskPriority @default(MEDIUM) // <-- added
 
@@ -55,12 +54,6 @@ model Task {
   category    Category?    @relation(fields: [categoryId], references: [id])
 }
 
-
-enum TaskStatus {
-  INCOMPLETE
-  COMPLETE
-  OVERDUE
-}
 
 enum TaskPriority {
   LOW

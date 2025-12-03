@@ -24,3 +24,9 @@ export interface IPaginationMeta {
   hasNext: boolean;
   hasPrev: boolean;
 }
+
+export enum TaskStatus {
+  INCOMPLETE = 'INCOMPLETE',
+  COMPLETE = 'COMPLETE',
+  OVERDUE = 'OVERDUE',
+}

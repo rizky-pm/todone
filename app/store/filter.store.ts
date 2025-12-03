@@ -1,7 +1,8 @@
 'use client';
 
 import { create } from 'zustand';
-import { TaskStatus, TaskPriority } from '@/src/generated/enums';
+import { TaskPriority } from '@/src/generated/enums';
+import { TaskStatus } from '../types';
 
 export interface IFilterState {
   category: string | undefined;

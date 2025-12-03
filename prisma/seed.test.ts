@@ -1,9 +1,10 @@
 // prisma/seed.test.ts
 
-import { TaskPriority, TaskStatus } from '@/src/generated/enums';
+import { TaskPriority } from '@/src/generated/enums';
 import { prisma } from '../app/lib/db';
 import bcrypt from 'bcrypt';
 import 'dotenv/config';
+import { faker } from '@faker-js/faker';
 
 async function main() {
   console.log('Seeding TEST data...');
@@ -60,10 +61,13 @@ async function main() {
       id: 'task-1',
       title: 'Write documentation',
       description: 'Draft API specs for authentication module',
-      status: TaskStatus.INCOMPLETE,
       priority: TaskPriority.HIGH,
       userId: testUser.id,
       categoryId: categoryWork.id,
+      dueDate: faker.date.between({
+        from: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // past 7 days
+        to: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // next 7 days
+      }),
     },
   });
 
@@ -72,11 +76,14 @@ async function main() {
       id: 'task-2',
       title: 'Buy groceries',
       description: 'Milk, eggs, bread',
-      status: TaskStatus.COMPLETE,
       priority: TaskPriority.LOW,
       userId: testUser.id,
       categoryId: categoryPersonal.id,
       completedAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+      dueDate: faker.date.between({
+        from: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // past 7 days
+        to: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // next 7 days
+      }),
     },
   });
 
@@ -85,11 +92,14 @@ async function main() {
       id: 'task-3',
       title: 'Refactor UI components',
       description: null,
-      status: TaskStatus.INCOMPLETE,
       priority: TaskPriority.MEDIUM,
       userId: testUser.id,
       categoryId: categoryWork.id,
       completedAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+      dueDate: faker.date.between({
+        from: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // past 7 days
+        to: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // next 7 days
+      }),
     },
   });
 

@@ -9,15 +9,6 @@
 * 🟢 You can import this file directly.
 */
 
-export const TaskStatus = {
-  INCOMPLETE: 'INCOMPLETE',
-  COMPLETE: 'COMPLETE',
-  OVERDUE: 'OVERDUE'
-} as const
-
-export type TaskStatus = (typeof TaskStatus)[keyof typeof TaskStatus]
-
-
 export const TaskPriority = {
   LOW: 'LOW',
   MEDIUM: 'MEDIUM',

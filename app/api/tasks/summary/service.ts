@@ -1,6 +1,5 @@
 import { getCurrentUser } from '@/app/lib/auth';
 import { prisma } from '@/app/lib/db';
-import { TaskStatus } from '@/src/generated/enums';
 import dayjs from 'dayjs';
 
 export const getSummary = async () => {
@@ -20,21 +19,20 @@ export const getSummary = async () => {
     prisma.task.count({
       where: {
         userId: user.id,
-        status: TaskStatus.COMPLETE,
+        completedAt: { not: null },
       },
     }),
-
     prisma.task.count({
       where: {
         userId: user.id,
-        status: TaskStatus.INCOMPLETE,
+        completedAt: null,
+        dueDate: { gte: now },
       },
     }),
-
     prisma.task.count({
       where: {
         userId: user.id,
-        status: TaskStatus.INCOMPLETE,
+        completedAt: null,
         dueDate: { lt: now },
       },
     }),

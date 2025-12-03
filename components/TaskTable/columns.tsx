@@ -81,36 +81,39 @@ export const columns: ColumnDef<TaskWithCategory>[] = [
     },
   },
   {
-    accessorKey: 'status',
+    id: 'status',
     header: 'Status',
     cell: ({ row }) => {
-      const value = row.original.status.toLocaleLowerCase();
+      const dueDate = dayjs(row.original.dueDate);
+      const completedAt = row.original.completedAt
+        ? dayjs(row.original.completedAt)
+        : null;
+      const now = dayjs();
 
-      const isOverdue = dayjs(row.original.dueDate).isBefore(dayjs());
+      if (!completedAt) {
+        if (now.isAfter(dueDate)) {
+          return (
+            <Badge className='bg-red-200 text-red-600 capitalize'>
+              Overdue
+            </Badge>
+          );
+        }
 
-      if (isOverdue) {
-        return (
-          <Badge className='bg-red-200 text-red-600 capitalize'>Overdue</Badge>
-        );
-      }
-
-      if (value === 'incomplete') {
         return (
           <Badge className='bg-yellow-200 text-yellow-600 capitalize'>
-            {value}
-          </Badge>
-        );
-      } else if (value === 'complete') {
-        return (
-          <Badge className='bg-green-200 text-green-600 capitalize'>
-            {value}
+            In Progress
           </Badge>
         );
       }
 
-      return <Badge>{value}</Badge>;
+      return (
+        <Badge className='bg-green-200 text-green-600 capitalize'>
+          Completed
+        </Badge>
+      );
     },
   },
+
   {
     accessorKey: 'priority',
     header: 'Priority',
@@ -140,7 +143,6 @@ export const columns: ColumnDef<TaskWithCategory>[] = [
   },
   {
     id: 'actions',
-    // header: () => <div className='text-right'>Amount</div>,
     cell: ({ row }) => {
       const payment = row.original;
 
