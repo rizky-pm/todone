@@ -63,7 +63,7 @@ export async function POST(req: NextRequest) {
         message: 'Success create new task',
         data: task,
       },
-      { status: 200 }
+      { status: 201 }
     );
   } catch (error) {
     console.error('POST /api/tasks error:', error);
