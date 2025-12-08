@@ -95,3 +95,33 @@ export const getTasks = async ({
     },
   };
 };
+
+export const createTask = async (payload: {
+  title: string;
+  description?: string;
+  categoryId: string;
+  priority: TaskPriority;
+  dueDate: Date;
+}) => {
+  const user = await getCurrentUser();
+
+  if (!user) {
+    throw new Error('Unauthorized');
+  }
+
+  const { title, description, categoryId, priority, dueDate } = payload;
+
+  if (!title || !categoryId || !priority || !dueDate) {
+    throw new Error('invalid-payload-values');
+  }
+
+  const task = await prisma.task.create({
+    data: {
+      ...payload,
+      description: description ?? null,
+      userId: user.id,
+    },
+  });
+
+  return task;
+};

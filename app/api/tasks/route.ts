@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getTasks } from './service';
+import { createTask, getTasks } from './service';
 import { parseTaskPriority, parseTaskStatus } from '@/app/lib/parsers';
 
 export async function GET(req: NextRequest) {
@@ -39,6 +39,43 @@ export async function GET(req: NextRequest) {
       if (error.message === 'invalid-pagination-values') {
         return NextResponse.json(
           { error: 'Invalid pagination values' },
+          { status: 400 }
+        );
+      }
+    }
+
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    );
+  }
+}
+
+export async function POST(req: NextRequest) {
+  try {
+    const body = await req.json();
+
+    const task = await createTask(body);
+
+    return NextResponse.json(
+      {
+        success: true,
+        message: 'Success create new task',
+        data: task,
+      },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error('POST /api/tasks error:', error);
+
+    if (error instanceof Error) {
+      if (error.message === 'Unauthorized') {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      }
+
+      if (error.message === 'invalid-payload-values') {
+        return NextResponse.json(
+          { error: 'Invalid task data, please check again' },
           { status: 400 }
         );
       }

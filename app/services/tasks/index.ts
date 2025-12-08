@@ -1,9 +1,10 @@
 import { api } from '@/app/api';
 import { IBaseResponse, IPaginationMeta, ISummary } from '@/app/types';
-import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import { keepPreviousData, useMutation, useQuery } from '@tanstack/react-query';
 import type { Prisma } from '@/src/generated/client';
 import { IFilterState } from '@/app/store/filter.store';
 import _ from 'lodash';
+import { TypeTaskFormSchema } from '@/app/(protected)/task/schema';
 
 export type TaskWithCategory = Prisma.TaskGetPayload<{
   include: {
@@ -80,5 +81,16 @@ export const useGetTaskQuery = (params: {
             meta: params.meta,
           }
         : undefined,
+  });
+};
+
+export const useCreateTaskMutation = () => {
+  return useMutation({
+    mutationKey: ['task.create-task'],
+    mutationFn: async (payload: TypeTaskFormSchema) => {
+      const response = await api.post('api/tasks', payload);
+
+      return response.data;
+    },
   });
 };

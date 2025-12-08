@@ -11,6 +11,7 @@ import {
 
 import { TypographySmall } from '../ui/typography';
 import { useFilterStore } from '@/app/store/filter.store';
+import { PRIORITY_OPTIONS } from '@/app/constants';
 
 const SelectPriority = () => {
   const selectedPriority = useFilterStore((store) => store.priority);
@@ -26,9 +27,11 @@ const SelectPriority = () => {
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            <SelectItem value='low'>Low</SelectItem>
-            <SelectItem value='medium'>Medium</SelectItem>
-            <SelectItem value='high'>High</SelectItem>
+            {PRIORITY_OPTIONS.map((priority) => (
+              <SelectItem key={priority.value} value={priority.value}>
+                {priority.label}
+              </SelectItem>
+            ))}
           </SelectGroup>
         </SelectContent>
       </Select>
