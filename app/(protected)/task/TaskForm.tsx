@@ -187,7 +187,7 @@ const TaskForm = ({ initialData }: IProps) => {
                     }}
                   >
                     <TypographyMuted className='cursor-pointer underline'>
-                      Add new category
+                      Manage category
                     </TypographyMuted>
                   </div>
                 </div>
