@@ -1,5 +1,6 @@
 import { TaskPriority } from '@/src/generated/enums';
 import { TaskStatus } from '@/app/types';
+import { NextRequest } from 'next/server';
 
 export const parseTaskStatus = (
   value: string | null
@@ -21,3 +22,11 @@ export const parseTaskPriority = (
   const validValues = Object.values(TaskPriority) as string[];
   return validValues.includes(value) ? (value as TaskPriority) : undefined;
 };
+
+export async function safeJson(req: NextRequest) {
+  try {
+    return await req.json();
+  } catch {
+    return null;
+  }
+}

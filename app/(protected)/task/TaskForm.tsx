@@ -30,7 +30,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
-import { CalendarIcon } from 'lucide-react';
+import { CalendarIcon, Plus, PlusCircle } from 'lucide-react';
 import dayjs from 'dayjs';
 import DueDatePicker from '@/components/DueDatePicker';
 import { useCreateTaskMutation, useUpdateTask } from '@/app/services/tasks';
@@ -38,6 +38,7 @@ import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import { Task } from '@/src/generated/client';
+import { TypographyMuted } from '@/components/ui/typography';
 
 interface IProps {
   initialData: Task | null;
@@ -177,7 +178,18 @@ const TaskForm = ({ initialData }: IProps) => {
             name='categoryId'
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Category</FormLabel>
+                <div className='flex justify-between items-center'>
+                  <FormLabel>Category</FormLabel>
+                  <div
+                    onClick={() => {
+                      router.push('/category');
+                    }}
+                  >
+                    <TypographyMuted className='cursor-pointer underline'>
+                      Add new category
+                    </TypographyMuted>
+                  </div>
+                </div>
 
                 <Select onValueChange={field.onChange} value={field.value}>
                   <FormControl>

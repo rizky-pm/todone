@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { deleteTaskById, getTaskById, updateTask } from './service';
 import { HttpError } from '@/lib/errors';
+import { safeJson } from '@/app/lib/parsers';
 
 export async function GET({ params }: { params: { taskId: string } }) {
   try {
@@ -25,14 +26,6 @@ export async function GET({ params }: { params: { taskId: string } }) {
       { error: 'Internal server error' },
       { status: 500 }
     );
-  }
-}
-
-async function safeJson(req: NextRequest) {
-  try {
-    return await req.json();
-  } catch {
-    return null;
   }
 }
 
