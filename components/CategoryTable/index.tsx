@@ -24,7 +24,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { TypographyH4 } from '../ui/typography';
 import { useState } from 'react';
-import { CategoryDialog } from './CategoryDialog/index.tsx';
+import { CategoryDialog } from './CategoryDialog';
 import {
   Dialog,
   DialogClose,
@@ -106,6 +106,7 @@ const CategoryTable = (props: IProps) => {
         <Button
           size={'sm'}
           onClick={() => {
+            setDialogProperty(null);
             setIsDialogOpen(true);
           }}
         >

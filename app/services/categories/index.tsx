@@ -21,14 +21,17 @@ export const useGetCategoriesQuery = (params?: {
       const response = await api.get<IGetCategoriesResponse>('/api/categories');
       return response.data;
     },
+
     ...(params?.initialData && {
-      initialData: {
+      placeholderData: {
         success: true,
         message: 'Success retrieving categories data',
         data: params.initialData,
       },
     }),
+
     staleTime: 500,
+    refetchOnMount: true,
   });
 };
 
@@ -44,13 +47,15 @@ export const useGetCategoriesManageQuery = (params?: {
 
       return response.data;
     },
+
     ...(params?.initialData && {
-      initialData: {
+      placeholderData: {
         success: true,
         message: 'Success retrieving categories data',
         data: params.initialData,
       },
     }),
+
     staleTime: 500,
   });
 };

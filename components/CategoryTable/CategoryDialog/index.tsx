@@ -82,9 +82,11 @@ export function CategoryDialog(props: IProps) {
           });
 
           setIsOpen(false);
+
           queryClient.invalidateQueries({
             queryKey: ['categories.get-all-manage'],
           });
+          queryClient.invalidateQueries({ queryKey: ['categories.get-all'] });
         },
         onError: (error) => {
           if (axios.isAxiosError(error)) {
@@ -105,6 +107,7 @@ export function CategoryDialog(props: IProps) {
           queryClient.invalidateQueries({
             queryKey: ['categories.get-all-manage'],
           });
+          queryClient.invalidateQueries({ queryKey: ['categories.get-all'] });
         },
         onError: (error) => {
           if (axios.isAxiosError(error)) {
