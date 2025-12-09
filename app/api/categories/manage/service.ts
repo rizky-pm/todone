@@ -17,7 +17,11 @@ export const getCategoriesManage = async (userId: string) => {
     include: {
       _count: {
         select: {
-          tasks: true,
+          tasks: {
+            where: {
+              userId: userId,
+            },
+          },
         },
       },
     },
