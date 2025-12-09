@@ -33,6 +33,10 @@ const UserAvatar = () => {
     router.push('/category');
   };
 
+  const onClickSettings = () => {
+    router.push('/settings');
+  };
+
   const signOut = () => {
     mutateAsync(undefined, {
       onSuccess: () => {
@@ -55,7 +59,7 @@ const UserAvatar = () => {
         <DropdownMenuItem onClick={onClickManageCategory}>
           <Tags /> Manage Category
         </DropdownMenuItem>
-        <DropdownMenuItem>
+        <DropdownMenuItem onClick={onClickSettings}>
           <Settings /> Settings
         </DropdownMenuItem>
         <DropdownMenuItem disabled={isPending} onClick={signOut}>
