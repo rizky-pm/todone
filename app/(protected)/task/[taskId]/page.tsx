@@ -1,7 +1,7 @@
 import { TypographyH3, TypographyP } from '@/components/ui/typography';
-import React from 'react';
 import TaskForm from '../TaskForm';
 import { getTaskById } from '@/app/api/tasks/[taskId]/service';
+import TaskActions from './TaskActions';
 
 const TaskDetail = async ({
   params,
@@ -13,11 +13,15 @@ const TaskDetail = async ({
 
   return (
     <section className='flex flex-col gap-4 my-6  shadow-sm rounded-lg p-4'>
-      <div className=''>
-        <TypographyH3>Add New Task</TypographyH3>
-        <TypographyP>
-          Use the form below to create a new task and add it to your list.
-        </TypographyP>
+      <div className='flex justify-between'>
+        <div>
+          <TypographyH3>Task Overview</TypographyH3>
+          <TypographyP>
+            Review the information below to see full details related to this
+            task.
+          </TypographyP>
+        </div>
+        <TaskActions taskId={taskId} />
       </div>
       <TaskForm initialData={task} />
     </section>

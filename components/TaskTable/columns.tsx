@@ -1,111 +1,11 @@
 'use client';
 
-import { ColumnDef, Row } from '@tanstack/react-table';
+import { ColumnDef } from '@tanstack/react-table';
 import { Badge } from '../ui/badge';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '../ui/dropdown-menu';
-import { Button } from '../ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import { MoreHorizontal } from 'lucide-react';
 import dayjs from 'dayjs';
-import {
-  TaskWithCategory,
-  useDeleteTask,
-  useUpdateTask,
-} from '@/app/services/tasks';
-import { useRouter } from 'next/navigation';
-import { toast } from 'sonner';
-import axios from 'axios';
-import { useQueryClient } from '@tanstack/react-query';
-
-const Actions = ({ row }: { row: Row<TaskWithCategory> }) => {
-  const router = useRouter();
-  const task = row.original;
-
-  const queryClient = useQueryClient();
-  const { mutateAsync: updateTask } = useUpdateTask();
-  const { mutateAsync: deleteTask } = useDeleteTask();
-
-  const onClickViewDetails = () => {
-    router.push(`/task/${task.id}`);
-  };
-
-  const onClickComplete = () => {
-    updateTask(
-      { payload: undefined, taskId: task.id },
-      {
-        onSuccess: (data) => {
-          toast.success(data.message, {
-            duration: 4000,
-          });
-
-          queryClient.invalidateQueries({ queryKey: ['task.get-all'] });
-        },
-        onError: (error) => {
-          if (axios.isAxiosError(error)) {
-            const errorMessage = error.response?.data.error;
-            toast.error(errorMessage);
-            console.error('Error: ', error);
-          }
-        },
-      }
-    );
-  };
-
-  const onClickDelete = () => {
-    deleteTask(
-      { taskId: task.id },
-      {
-        onSuccess: (data) => {
-          toast.success(data.message, {
-            duration: 4000,
-          });
-
-          queryClient.invalidateQueries({ queryKey: ['task.get-all'] });
-        },
-        onError: (error) => {
-          if (axios.isAxiosError(error)) {
-            const errorMessage = error.response?.data.error;
-            toast.error(errorMessage);
-            console.error('Error: ', error);
-          }
-        },
-      }
-    );
-  };
-
-  return (
-    <div className='text-right'>
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant='ghost' className='h-8 w-8 p-0'>
-            <span className='sr-only'>Open menu</span>
-            <MoreHorizontal className='h-4 w-4' />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align='end'>
-          <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={onClickViewDetails}>
-            View Details
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={onClickComplete}>
-            {row.original.completedAt
-              ? 'Mark as incomplete'
-              : 'Mark as complete'}
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={onClickDelete}>Delete</DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </div>
-  );
-};
+import { TaskWithCategory } from '@/app/services/tasks';
+import ColumnActions from './column-actions';
 
 export const columns: ColumnDef<TaskWithCategory>[] = [
   {
@@ -241,7 +141,7 @@ export const columns: ColumnDef<TaskWithCategory>[] = [
   {
     id: 'actions',
     cell: ({ row }) => {
-      return <Actions row={row} />;
+      return <ColumnActions row={row} />;
     },
   },
 ];
