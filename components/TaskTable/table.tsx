@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { columns } from './columns';
 import { DataTable } from './data-table';
 import { TaskWithCategory, useGetTaskQuery } from '@/app/services/tasks';
@@ -14,12 +14,13 @@ interface IInitialData {
 
 const TaskTableClient = (props: IInitialData) => {
   const { data, meta } = props;
-  const [pageIndex, setPageIndex] = useState(1);
 
   const category = useFilterStore((store) => store.category);
   const status = useFilterStore((store) => store.status);
   const priority = useFilterStore((store) => store.priority);
   const applySignal = useFilterStore((store) => store.applySignal);
+  const pageIndex = useFilterStore((store) => store.pageIndex);
+  const setPageIndex = useFilterStore((store) => store.setPageIndex);
 
   const queryTask = useGetTaskQuery({
     page: pageIndex,
@@ -42,7 +43,7 @@ const TaskTableClient = (props: IInitialData) => {
         columns={columns}
         data={tasks.data}
         meta={tasks.meta}
-        onPageChange={(newPageIndex) => setPageIndex(newPageIndex)}
+        onPageChange={() => setPageIndex()}
       />
     </div>
   );
