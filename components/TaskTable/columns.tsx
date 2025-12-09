@@ -1,6 +1,6 @@
 'use client';
 
-import { ColumnDef } from '@tanstack/react-table';
+import { ColumnDef, Row } from '@tanstack/react-table';
 import { Badge } from '../ui/badge';
 import {
   DropdownMenu,
@@ -15,6 +15,38 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { MoreHorizontal } from 'lucide-react';
 import dayjs from 'dayjs';
 import { TaskWithCategory } from '@/app/services/tasks';
+import { useRouter } from 'next/navigation';
+
+const Actions = ({ row }: { row: Row<TaskWithCategory> }) => {
+  const router = useRouter();
+  const task = row.original;
+
+  const onClickViewDetails = () => {
+    router.push(`/task/${task.id}`);
+  };
+
+  return (
+    <div className='text-right'>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant='ghost' className='h-8 w-8 p-0'>
+            <span className='sr-only'>Open menu</span>
+            <MoreHorizontal className='h-4 w-4' />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align='end'>
+          <DropdownMenuLabel>Actions</DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem onClick={onClickViewDetails}>
+            View Details
+          </DropdownMenuItem>
+          <DropdownMenuItem>Mark as Complete</DropdownMenuItem>
+          <DropdownMenuItem>Delete</DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
+  );
+};
 
 export const columns: ColumnDef<TaskWithCategory>[] = [
   {
@@ -150,27 +182,7 @@ export const columns: ColumnDef<TaskWithCategory>[] = [
   {
     id: 'actions',
     cell: ({ row }) => {
-      const payment = row.original;
-
-      return (
-        <div className='text-right'>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant='ghost' className='h-8 w-8 p-0'>
-                <span className='sr-only'>Open menu</span>
-                <MoreHorizontal className='h-4 w-4' />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align='end'>
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Edit</DropdownMenuItem>
-              <DropdownMenuItem>Delete</DropdownMenuItem>
-              <DropdownMenuItem>Mark as Complete</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      );
+      return <Actions row={row} />;
     },
   },
 ];

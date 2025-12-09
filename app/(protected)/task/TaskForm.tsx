@@ -33,43 +33,92 @@ import { cn } from '@/lib/utils';
 import { CalendarIcon } from 'lucide-react';
 import dayjs from 'dayjs';
 import DueDatePicker from '@/components/DueDatePicker';
-import { useCreateTaskMutation } from '@/app/services/tasks';
+import { useCreateTaskMutation, useUpdateTask } from '@/app/services/tasks';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
+import { Task } from '@/src/generated/client';
 
-const TaskForm = () => {
+interface IProps {
+  initialData: Task | null;
+}
+
+const TaskForm = ({ initialData }: IProps) => {
   const form = useForm<TypeTaskFormSchema>({
     resolver: zodResolver(taskFormSchema),
     defaultValues: {
-      title: '',
-      description: '',
-      categoryId: '',
-      priority: undefined,
-      dueDate: undefined,
+      title: initialData?.title ?? '',
+      description: initialData?.description ?? '',
+      categoryId: initialData?.categoryId ?? '',
+      priority: initialData?.priority ?? undefined,
+      dueDate: initialData?.dueDate ?? undefined,
     },
   });
 
   const router = useRouter();
 
-  const { mutateAsync } = useCreateTaskMutation();
+  const { mutateAsync: createTask } = useCreateTaskMutation();
+  const { mutateAsync: updateTask } = useUpdateTask();
+
+  const onClickReset = () => {
+    if (initialData) {
+      form.reset({
+        title: initialData.title,
+        description: initialData.description ?? '',
+        categoryId: initialData.categoryId ?? '',
+        priority: initialData.priority,
+        dueDate: initialData.dueDate,
+      });
+    } else {
+      form.reset({
+        title: '',
+        description: '',
+        categoryId: '',
+        priority: undefined,
+        dueDate: undefined,
+      });
+    }
+  };
 
   const onSubmit = (values: TypeTaskFormSchema) => {
-    mutateAsync(values, {
-      onSuccess: (data) => {
-        toast.success(data.message, {
-          duration: 4000,
-        });
+    if (initialData) {
+      updateTask(
+        { payload: { ...values }, taskId: initialData.id },
+        {
+          onSuccess: (data) => {
+            toast.success(data.message, {
+              duration: 4000,
+            });
 
-        router.push('/dashboard');
-      },
-      onError: (error) => {
-        if (axios.isAxiosError(error)) {
-          toast.error(error.response?.data.message);
-          console.error('Error: ', error);
+            router.push('/dashboard');
+          },
+          onError: (error) => {
+            if (axios.isAxiosError(error)) {
+              const errorMessage = error.response?.data.error;
+              toast.error(errorMessage);
+              console.error('Error: ', error);
+            }
+          },
         }
-      },
-    });
+      );
+    } else {
+      createTask(values, {
+        onSuccess: (data) => {
+          toast.success(data.message, {
+            duration: 4000,
+          });
+
+          router.push('/dashboard');
+        },
+        onError: (error) => {
+          if (axios.isAxiosError(error)) {
+            const errorMessage = error.response?.data.error;
+            toast.error(errorMessage);
+            console.error('Error: ', error);
+          }
+        },
+      });
+    }
   };
 
   const { data: categoriesData, isLoading: isGettingCategories } =
@@ -265,8 +314,12 @@ const TaskForm = () => {
         </div>
 
         <div className='t-actions flex justify-end gap-4'>
-          <Button variant={'outline'}>Reset</Button>
-          <Button>Create Task</Button>
+          <Button variant={'outline'} type='reset' onClick={onClickReset}>
+            Reset
+          </Button>
+          <Button type='submit'>
+            {initialData ? 'Edit Task' : 'Create Task'}
+          </Button>
         </div>
       </form>
     </Form>

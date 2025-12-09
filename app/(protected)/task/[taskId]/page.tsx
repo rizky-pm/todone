@@ -1,7 +1,16 @@
 import { TypographyH3, TypographyP } from '@/components/ui/typography';
-import TaskForm from './TaskForm';
+import React from 'react';
+import TaskForm from '../TaskForm';
+import { getTaskById } from '@/app/api/tasks/[taskId]/service';
 
-const Task = () => {
+const TaskDetail = async ({
+  params,
+}: {
+  params: Promise<{ taskId: string }>;
+}) => {
+  const taskId = (await params).taskId;
+  const task = await getTaskById(taskId);
+
   return (
     <section className='flex flex-col gap-4 my-6  shadow-sm rounded-lg p-4'>
       <div className=''>
@@ -10,9 +19,9 @@ const Task = () => {
           Use the form below to create a new task and add it to your list.
         </TypographyP>
       </div>
-      <TaskForm />
+      <TaskForm initialData={task} />
     </section>
   );
 };
 
-export default Task;
+export default TaskDetail;

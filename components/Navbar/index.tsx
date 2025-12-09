@@ -13,7 +13,14 @@ const Navbar = () => {
   return (
     <nav className='flex justify-between items-center py-4'>
       <div className='flex flex-col'>
-        <span className='font-bold text-2xl'>Todone</span>
+        <span
+          className='font-bold text-2xl'
+          onClick={() => {
+            router.push('/dashboard');
+          }}
+        >
+          Todone
+        </span>
         <TypographySmall>Organize your life, one task at time</TypographySmall>
       </div>
 
@@ -21,7 +28,7 @@ const Navbar = () => {
         {!pathname.includes('/task') && (
           <Button
             onClick={() => {
-              router.push('/task');
+              router.push('/task/create-new');
             }}
           >
             <Plus />

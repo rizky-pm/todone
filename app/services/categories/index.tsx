@@ -13,7 +13,7 @@ export const useGetCategoriesQuery = (params?: {
   return useQuery({
     queryKey: ['categories.get-all'],
     queryFn: async () => {
-      const response = await api.get<IGetCategoriesResponse>('api/categories');
+      const response = await api.get<IGetCategoriesResponse>('/api/categories');
       return response.data;
     },
     ...(params?.initialData && {

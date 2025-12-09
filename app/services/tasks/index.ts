@@ -1,7 +1,7 @@
 import { api } from '@/app/api';
 import { IBaseResponse, IPaginationMeta, ISummary } from '@/app/types';
 import { keepPreviousData, useMutation, useQuery } from '@tanstack/react-query';
-import type { Prisma } from '@/src/generated/client';
+import type { Prisma, TaskPriority } from '@/src/generated/client';
 import { IFilterState } from '@/app/store/filter.store';
 import _ from 'lodash';
 import { TypeTaskFormSchema } from '@/app/(protected)/task/schema';
@@ -59,7 +59,7 @@ export const useGetTaskQuery = (params: {
     queryFn: async () => {
       const { page, limit, filter } = params;
 
-      const response = await api.get<IGetTasksResponse>(`api/tasks`, {
+      const response = await api.get<IGetTasksResponse>(`/api/tasks`, {
         params: {
           page: page,
           limit: limit,
@@ -84,11 +84,45 @@ export const useGetTaskQuery = (params: {
   });
 };
 
+export const useGetTaskById = ({ taskId }: { taskId: string }) => {
+  return useQuery({
+    queryKey: ['task.get-by-id', taskId],
+    queryFn: async () => {
+      const response = await api.get(`/api/tasks/${taskId}`);
+
+      return response.data;
+    },
+  });
+};
+
 export const useCreateTaskMutation = () => {
   return useMutation({
     mutationKey: ['task.create-task'],
     mutationFn: async (payload: TypeTaskFormSchema) => {
-      const response = await api.post('api/tasks', payload);
+      const response = await api.post('/api/tasks', payload);
+
+      return response.data;
+    },
+  });
+};
+
+export const useUpdateTask = () => {
+  return useMutation({
+    mutationKey: ['task.update-task'],
+    mutationFn: async ({
+      payload,
+      taskId,
+    }: {
+      payload: {
+        title?: string;
+        description?: string;
+        categoryId?: string;
+        priority?: TaskPriority;
+        dueDate?: Date;
+      };
+      taskId: string;
+    }) => {
+      const response = await api.patch(`/api/tasks/${taskId}`, payload);
 
       return response.data;
     },
