@@ -48,6 +48,23 @@ export const createCategory = async (
     throw new HttpError(400, 'Category name cannot be empty.');
   }
 
+  const count = await prisma.category.count({
+    where: {
+      OR: [
+        {
+          userId: userId,
+        },
+      ],
+    },
+  });
+
+  if (count > 20) {
+    throw new HttpError(
+      409,
+      'Cannot create a new category. The maximum of 20 has been reached.'
+    );
+  }
+
   const existing = await prisma.category.findFirst({
     where: {
       userId: userId,
