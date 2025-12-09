@@ -30,7 +30,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
-import { CalendarIcon, Plus, PlusCircle } from 'lucide-react';
+import { CalendarIcon } from 'lucide-react';
 import dayjs from 'dayjs';
 import DueDatePicker from '@/components/DueDatePicker';
 import { useCreateTaskMutation, useUpdateTask } from '@/app/services/tasks';
@@ -58,8 +58,9 @@ const TaskForm = ({ initialData }: IProps) => {
 
   const router = useRouter();
 
-  const { mutateAsync: createTask } = useCreateTaskMutation();
-  const { mutateAsync: updateTask } = useUpdateTask();
+  const { mutateAsync: createTask, isPending: creatingTask } =
+    useCreateTaskMutation();
+  const { mutateAsync: updateTask, isPending: updatingTask } = useUpdateTask();
 
   const onClickReset = () => {
     if (initialData) {
@@ -82,9 +83,9 @@ const TaskForm = ({ initialData }: IProps) => {
   };
 
   const onSubmit = (values: TypeTaskFormSchema) => {
-    if (!form.formState.isDirty) return;
-
     if (initialData) {
+      if (!form.formState.isDirty) return;
+
       updateTask(
         { payload: { ...values }, taskId: initialData.id },
         {
@@ -328,10 +329,15 @@ const TaskForm = ({ initialData }: IProps) => {
         </div>
 
         <div className='t-actions flex justify-end gap-4'>
-          <Button variant={'outline'} type='reset' onClick={onClickReset}>
+          <Button
+            variant={'outline'}
+            type='reset'
+            onClick={onClickReset}
+            disabled={creatingTask || updatingTask}
+          >
             Reset
           </Button>
-          <Button type='submit'>
+          <Button type='submit' disabled={creatingTask || updatingTask}>
             {initialData ? 'Edit Task' : 'Create Task'}
           </Button>
         </div>
