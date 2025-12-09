@@ -81,6 +81,8 @@ const TaskForm = ({ initialData }: IProps) => {
   };
 
   const onSubmit = (values: TypeTaskFormSchema) => {
+    if (!form.formState.isDirty) return;
+
     if (initialData) {
       updateTask(
         { payload: { ...values }, taskId: initialData.id },
