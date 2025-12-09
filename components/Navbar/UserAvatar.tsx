@@ -8,14 +8,15 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { LogOut } from 'lucide-react';
+import { LogOut, Settings, Tags } from 'lucide-react';
 import { useMemo } from 'react';
 import { getInitials } from '@/app/lib/string';
 import { useSignOutMutation } from '@/app/services/auth';
-import { redirect } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
 import { useAuthStore } from '@/app/store/auth.store';
 
 const UserAvatar = () => {
+  const router = useRouter();
   const user = useAuthStore((store) => store.user);
 
   const { mutateAsync, isPending } = useSignOutMutation();
@@ -27,6 +28,10 @@ const UserAvatar = () => {
 
     return fallback;
   }, [user]);
+
+  const onClickManageCategory = () => {
+    router.push('/category');
+  };
 
   const signOut = () => {
     mutateAsync(undefined, {
@@ -47,6 +52,12 @@ const UserAvatar = () => {
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent align='end'>
+        <DropdownMenuItem onClick={onClickManageCategory}>
+          <Tags /> Manage Category
+        </DropdownMenuItem>
+        <DropdownMenuItem>
+          <Settings /> Settings
+        </DropdownMenuItem>
         <DropdownMenuItem disabled={isPending} onClick={signOut}>
           <LogOut />
           Log out
