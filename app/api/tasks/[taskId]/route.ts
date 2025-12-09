@@ -28,14 +28,22 @@ export async function GET({ params }: { params: { taskId: string } }) {
   }
 }
 
+async function safeJson(req: NextRequest) {
+  try {
+    return await req.json();
+  } catch {
+    return null;
+  }
+}
+
 export async function PATCH(
   req: NextRequest,
   { params }: { params: Promise<{ taskId: string }> }
 ) {
   const taskId = (await params).taskId;
   try {
-    const body = await req.json();
-    const updatedTask = await updateTask(body, taskId);
+    const body = await safeJson(req);
+    const updatedTask = await updateTask(taskId, body);
 
     return NextResponse.json(
       {

@@ -1,6 +1,11 @@
 import { api } from '@/app/api';
 import { IBaseResponse, IPaginationMeta, ISummary } from '@/app/types';
-import { keepPreviousData, useMutation, useQuery } from '@tanstack/react-query';
+import {
+  keepPreviousData,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 import type { Prisma, TaskPriority } from '@/src/generated/client';
 import { IFilterState } from '@/app/store/filter.store';
 import _ from 'lodash';
@@ -113,7 +118,7 @@ export const useUpdateTask = () => {
       payload,
       taskId,
     }: {
-      payload: {
+      payload?: {
         title?: string;
         description?: string;
         categoryId?: string;

@@ -14,15 +14,44 @@ import { Button } from '../ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { MoreHorizontal } from 'lucide-react';
 import dayjs from 'dayjs';
-import { TaskWithCategory } from '@/app/services/tasks';
+import { TaskWithCategory, useUpdateTask } from '@/app/services/tasks';
 import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
+import axios from 'axios';
+import { useQueryClient } from '@tanstack/react-query';
 
 const Actions = ({ row }: { row: Row<TaskWithCategory> }) => {
   const router = useRouter();
   const task = row.original;
 
+  const queryClient = useQueryClient();
+  const { mutateAsync } = useUpdateTask();
+
   const onClickViewDetails = () => {
     router.push(`/task/${task.id}`);
+  };
+
+  const onClickComplete = () => {
+    mutateAsync(
+      { payload: undefined, taskId: task.id },
+      {
+        onSuccess: (data) => {
+          toast.success(data.message, {
+            duration: 4000,
+          });
+
+          router.push('/dashboard');
+          queryClient.invalidateQueries({ queryKey: ['task.get-all'] });
+        },
+        onError: (error) => {
+          if (axios.isAxiosError(error)) {
+            const errorMessage = error.response?.data.error;
+            toast.error(errorMessage);
+            console.error('Error: ', error);
+          }
+        },
+      }
+    );
   };
 
   return (
@@ -40,7 +69,11 @@ const Actions = ({ row }: { row: Row<TaskWithCategory> }) => {
           <DropdownMenuItem onClick={onClickViewDetails}>
             View Details
           </DropdownMenuItem>
-          <DropdownMenuItem>Mark as Complete</DropdownMenuItem>
+          <DropdownMenuItem onClick={onClickComplete}>
+            {row.original.completedAt
+              ? 'Mark as incomplete'
+              : 'Mark as complete'}
+          </DropdownMenuItem>
           <DropdownMenuItem>Delete</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

@@ -29,14 +29,14 @@ export const getTaskById = async (taskId: string) => {
 };
 
 export const updateTask = async (
-  payload: {
+  taskId: string,
+  payload?: {
     title?: string;
     description?: string;
     categoryId?: string;
     priority?: TaskPriority;
     dueDate?: Date;
-  },
-  taskId: string
+  }
 ) => {
   const user = await getCurrentUser();
 
@@ -54,13 +54,28 @@ export const updateTask = async (
     throw new HttpError(404, 'Task not found');
   }
 
-  const updatedTask = await prisma.task.update({
-    where: {
-      userId: user.id,
-      id: taskId,
-    },
-    data: payload,
-  });
+  let updatedTask;
+
+  if (payload) {
+    updatedTask = await prisma.task.update({
+      where: {
+        userId: user.id,
+        id: taskId,
+      },
+      data: payload,
+    });
+  } else {
+    const isCompleting = task.completedAt == null;
+
+    updatedTask = await prisma.task.update({
+      where: {
+        id: taskId,
+      },
+      data: {
+        completedAt: isCompleting ? new Date() : null,
+      },
+    });
+  }
 
   return updatedTask;
 };
