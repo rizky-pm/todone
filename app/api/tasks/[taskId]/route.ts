@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getTaskById, updateTask } from './service';
+import { deleteTaskById, getTaskById, updateTask } from './service';
 import { HttpError } from '@/lib/errors';
 
 export async function GET({ params }: { params: { taskId: string } }) {
@@ -55,6 +55,44 @@ export async function PATCH(
     );
   } catch (error) {
     console.error('PATCH /api/tasks/[taskId] error:', error);
+
+    if (error instanceof HttpError) {
+      return NextResponse.json(
+        { error: error.message },
+        { status: error.status }
+      );
+    }
+
+    return NextResponse.json(
+      { message: 'Internal server error' },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(
+  req: NextRequest,
+  {
+    params,
+  }: {
+    params: Promise<{ taskId: string }>;
+  }
+) {
+  const taskId = (await params).taskId;
+
+  try {
+    await deleteTaskById(taskId);
+
+    return NextResponse.json(
+      {
+        success: true,
+        message: `Success delete task`,
+        data: null,
+      },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error('DELETE /api/tasks/[taskId] error:', error);
 
     if (error instanceof HttpError) {
       return NextResponse.json(

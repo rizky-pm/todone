@@ -14,7 +14,11 @@ import { Button } from '../ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { MoreHorizontal } from 'lucide-react';
 import dayjs from 'dayjs';
-import { TaskWithCategory, useUpdateTask } from '@/app/services/tasks';
+import {
+  TaskWithCategory,
+  useDeleteTask,
+  useUpdateTask,
+} from '@/app/services/tasks';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import axios from 'axios';
@@ -25,14 +29,15 @@ const Actions = ({ row }: { row: Row<TaskWithCategory> }) => {
   const task = row.original;
 
   const queryClient = useQueryClient();
-  const { mutateAsync } = useUpdateTask();
+  const { mutateAsync: updateTask } = useUpdateTask();
+  const { mutateAsync: deleteTask } = useDeleteTask();
 
   const onClickViewDetails = () => {
     router.push(`/task/${task.id}`);
   };
 
   const onClickComplete = () => {
-    mutateAsync(
+    updateTask(
       { payload: undefined, taskId: task.id },
       {
         onSuccess: (data) => {
@@ -40,7 +45,28 @@ const Actions = ({ row }: { row: Row<TaskWithCategory> }) => {
             duration: 4000,
           });
 
-          router.push('/dashboard');
+          queryClient.invalidateQueries({ queryKey: ['task.get-all'] });
+        },
+        onError: (error) => {
+          if (axios.isAxiosError(error)) {
+            const errorMessage = error.response?.data.error;
+            toast.error(errorMessage);
+            console.error('Error: ', error);
+          }
+        },
+      }
+    );
+  };
+
+  const onClickDelete = () => {
+    deleteTask(
+      { taskId: task.id },
+      {
+        onSuccess: (data) => {
+          toast.success(data.message, {
+            duration: 4000,
+          });
+
           queryClient.invalidateQueries({ queryKey: ['task.get-all'] });
         },
         onError: (error) => {
@@ -74,7 +100,7 @@ const Actions = ({ row }: { row: Row<TaskWithCategory> }) => {
               ? 'Mark as incomplete'
               : 'Mark as complete'}
           </DropdownMenuItem>
-          <DropdownMenuItem>Delete</DropdownMenuItem>
+          <DropdownMenuItem onClick={onClickDelete}>Delete</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </div>

@@ -79,3 +79,28 @@ export const updateTask = async (
 
   return updatedTask;
 };
+
+export const deleteTaskById = async (taskId: string) => {
+  const user = await getCurrentUser();
+
+  if (!user) {
+    throw new HttpError(401, 'Unauthorized');
+  }
+
+  if (!taskId) {
+    throw new HttpError(400, 'Bad request');
+  }
+
+  const task = await getTaskById(taskId);
+
+  if (!task) {
+    throw new HttpError(404, 'Task not found');
+  }
+
+  await prisma.task.delete({
+    where: {
+      userId: user.id,
+      id: taskId,
+    },
+  });
+};

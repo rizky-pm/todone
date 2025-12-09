@@ -133,3 +133,14 @@ export const useUpdateTask = () => {
     },
   });
 };
+
+export const useDeleteTask = () => {
+  return useMutation({
+    mutationKey: ['task.delete-task'],
+    mutationFn: async ({ taskId }: { taskId: string }) => {
+      const response = await api.delete(`/api/tasks/${taskId}`);
+
+      return response.data;
+    },
+  });
+};
