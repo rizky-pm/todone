@@ -1,18 +1,11 @@
 import { prisma } from '@/app/lib/db';
-import { getCurrentUser } from '@/app/lib/auth';
 
-export const getCategories = async () => {
-  const user = await getCurrentUser();
-
-  if (!user) {
-    throw new Error('Unauthorized');
-  }
-
+export const getCategories = async (userId: string) => {
   const categories = await prisma.category.findMany({
     where: {
       OR: [
         {
-          userId: user.id,
+          userId: userId,
         },
         {
           userId: null,

@@ -7,7 +7,13 @@ export async function GET(req: NextRequest) {
   const path = new URL(url).pathname;
 
   try {
-    const categories = await getCategoriesManage();
+    const userId = req.headers.get('x-user-id');
+
+    if (!userId) {
+      throw new HttpError(401, 'Unauthorized');
+    }
+
+    const categories = await getCategoriesManage(userId);
 
     return NextResponse.json(
       {
@@ -39,8 +45,14 @@ export async function POST(req: NextRequest) {
   const path = new URL(url).pathname;
 
   try {
+    const userId = req.headers.get('x-user-id');
+
+    if (!userId) {
+      throw new HttpError(401, 'Unauthorized');
+    }
+
     const body = await req.json();
-    const category = await createCategory(body);
+    const category = await createCategory(body, userId);
 
     return NextResponse.json(
       {

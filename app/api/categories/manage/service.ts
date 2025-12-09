@@ -1,20 +1,13 @@
-import { getCurrentUser } from '@/app/lib/auth';
 import { prisma } from '@/app/lib/db';
 import { HttpError } from '@/lib/errors';
 import { Category } from '@/src/generated/client';
 
-export const getCategoriesManage = async () => {
-  const user = await getCurrentUser();
-
-  if (!user) {
-    throw new HttpError(401, 'Unauthorized');
-  }
-
+export const getCategoriesManage = async (userId: string) => {
   const categories = await prisma.category.findMany({
     where: {
       OR: [
         {
-          userId: user.id,
+          userId: userId,
         },
         {
           userId: null,
@@ -37,14 +30,9 @@ export const getCategoriesManage = async () => {
 };
 
 export const createCategory = async (
-  payload: Pick<Category, 'color' | 'name'>
+  payload: Pick<Category, 'color' | 'name'>,
+  userId: string
 ) => {
-  const user = await getCurrentUser();
-
-  if (!user) {
-    throw new HttpError(401, 'Unauthorized');
-  }
-
   const { name, color } = payload;
 
   if (!name || !color) {
@@ -58,7 +46,7 @@ export const createCategory = async (
 
   const existing = await prisma.category.findFirst({
     where: {
-      userId: user.id,
+      userId: userId,
       name: normalizedName,
     },
   });
@@ -71,7 +59,7 @@ export const createCategory = async (
     data: {
       name: normalizedName,
       color,
-      userId: user.id,
+      userId: userId,
     },
   });
 

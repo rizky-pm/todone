@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 import { cookies } from 'next/headers';
 import { prisma } from './db';
 
@@ -17,13 +17,21 @@ export const signToken = (payload: object) => {
   return jwt.sign(payload, JWT_SECRET!, { expiresIn: '1h' });
 };
 
-export const verifyToken = (token: string) => {
+export function verifyToken(token?: string) {
+  if (!token) return null;
+
   try {
-    return jwt.verify(token, process.env.JWT_SECRET!);
+    const decoded = jwt.verify(token, JWT_SECRET!);
+
+    if (typeof decoded !== 'object' || !('userId' in decoded)) {
+      return null;
+    }
+
+    return { id: (decoded as JwtPayload & { userId: string }).userId };
   } catch {
     return null;
   }
-};
+}
 
 export async function getCurrentUser() {
   const token = (await cookies()).get('token')?.value;

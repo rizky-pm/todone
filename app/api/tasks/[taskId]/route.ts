@@ -3,9 +3,21 @@ import { deleteTaskById, getTaskById, updateTask } from './service';
 import { HttpError } from '@/lib/errors';
 import { safeJson } from '@/app/lib/parsers';
 
-export async function GET({ params }: { params: { taskId: string } }) {
+export async function GET(
+  req: NextRequest,
+  { params }: { params: { taskId: string } }
+) {
+  const url = req.url;
+  const path = new URL(url).pathname;
+
   try {
-    const task = await getTaskById(params.taskId);
+    const userId = req.headers.get('x-user-id');
+
+    if (!userId) {
+      throw new HttpError(401, 'Unauthorized');
+    }
+
+    const task = await getTaskById(params.taskId, userId);
 
     return NextResponse.json({
       success: true,
@@ -13,7 +25,7 @@ export async function GET({ params }: { params: { taskId: string } }) {
       data: task,
     });
   } catch (error) {
-    console.error('GET /api/tasks/[taskId] error:', error);
+    console.error(`${req.method} ${path} error:`, error);
 
     if (error instanceof HttpError) {
       return NextResponse.json(
@@ -23,7 +35,7 @@ export async function GET({ params }: { params: { taskId: string } }) {
     }
 
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { message: 'Internal server error' },
       { status: 500 }
     );
   }
@@ -33,10 +45,19 @@ export async function PATCH(
   req: NextRequest,
   { params }: { params: Promise<{ taskId: string }> }
 ) {
+  const url = req.url;
+  const path = new URL(url).pathname;
   const taskId = (await params).taskId;
+
   try {
+    const userId = req.headers.get('x-user-id');
+
+    if (!userId) {
+      throw new HttpError(401, 'Unauthorized');
+    }
+
     const body = await safeJson(req);
-    const updatedTask = await updateTask(taskId, body);
+    const updatedTask = await updateTask(taskId, userId, body);
 
     return NextResponse.json(
       {
@@ -47,7 +68,7 @@ export async function PATCH(
       { status: 200 }
     );
   } catch (error) {
-    console.error('PATCH /api/tasks/[taskId] error:', error);
+    console.error(`${req.method} ${path} error:`, error);
 
     if (error instanceof HttpError) {
       return NextResponse.json(
@@ -71,10 +92,18 @@ export async function DELETE(
     params: Promise<{ taskId: string }>;
   }
 ) {
+  const url = req.url;
+  const path = new URL(url).pathname;
   const taskId = (await params).taskId;
 
   try {
-    await deleteTaskById(taskId);
+    const userId = req.headers.get('x-user-id');
+
+    if (!userId) {
+      throw new HttpError(401, 'Unauthorized');
+    }
+
+    await deleteTaskById(taskId, userId);
 
     return NextResponse.json(
       {
@@ -85,7 +114,7 @@ export async function DELETE(
       { status: 200 }
     );
   } catch (error) {
-    console.error('DELETE /api/tasks/[taskId] error:', error);
+    console.error(`${req.method} ${path} error:`, error);
 
     if (error instanceof HttpError) {
       return NextResponse.json(

@@ -1,9 +1,19 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { getSummary } from './service';
+import { HttpError } from '@/lib/errors';
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+  const url = req.url;
+  const path = new URL(url).pathname;
+
   try {
-    const { total, completed, incomplete, overdue } = await getSummary();
+    const userId = req.headers.get('x-user-id');
+
+    if (!userId) {
+      throw new HttpError(401, 'Unauthorized');
+    }
+
+    const { total, completed, incomplete, overdue } = await getSummary(userId);
 
     return NextResponse.json(
       {
@@ -19,16 +29,17 @@ export async function GET() {
       { status: 200 }
     );
   } catch (error) {
-    console.error('GET /api/tasks/summary error:', error);
+    console.error(`${req.method} ${path} error:`, error);
 
-    if (error instanceof Error) {
-      if (error.message === 'Unauthorized') {
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-      }
+    if (error instanceof HttpError) {
+      return NextResponse.json(
+        { error: error.message },
+        { status: error.status }
+      );
     }
 
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { message: 'Internal server error' },
       { status: 500 }
     );
   }

@@ -1,22 +1,15 @@
-import { getCurrentUser } from '@/app/lib/auth';
 import { prisma } from '@/app/lib/db';
 import { HttpError } from '@/lib/errors';
 import { TaskPriority } from '@/src/generated/enums';
 
-export const getTaskById = async (taskId: string) => {
-  const user = await getCurrentUser();
-
-  if (!user) {
-    throw new HttpError(401, 'Unauthorized');
-  }
-
+export const getTaskById = async (taskId: string, userId: string) => {
   if (!taskId) {
-    throw new HttpError(400, 'Bad request');
+    throw new HttpError(400, 'Bad request, task id is required');
   }
 
   const task = await prisma.task.findFirst({
     where: {
-      userId: user.id,
+      userId: userId,
       id: taskId,
     },
   });
@@ -30,6 +23,7 @@ export const getTaskById = async (taskId: string) => {
 
 export const updateTask = async (
   taskId: string,
+  userId: string,
   payload?: {
     title?: string;
     description?: string;
@@ -38,17 +32,11 @@ export const updateTask = async (
     dueDate?: Date;
   }
 ) => {
-  const user = await getCurrentUser();
-
-  if (!user) {
-    throw new HttpError(401, 'Unauthorized');
-  }
-
   if (!taskId) {
-    throw new HttpError(400, 'Bad request');
+    throw new HttpError(400, 'Bad request, task id is required');
   }
 
-  const task = await getTaskById(taskId);
+  const task = await getTaskById(taskId, userId);
 
   if (!task) {
     throw new HttpError(404, 'Task not found');
@@ -59,7 +47,7 @@ export const updateTask = async (
   if (payload) {
     updatedTask = await prisma.task.update({
       where: {
-        userId: user.id,
+        userId: userId,
         id: taskId,
       },
       data: payload,
@@ -80,18 +68,12 @@ export const updateTask = async (
   return updatedTask;
 };
 
-export const deleteTaskById = async (taskId: string) => {
-  const user = await getCurrentUser();
-
-  if (!user) {
-    throw new HttpError(401, 'Unauthorized');
-  }
-
+export const deleteTaskById = async (taskId: string, userId: string) => {
   if (!taskId) {
-    throw new HttpError(400, 'Bad request');
+    throw new HttpError(400, 'Bad request, task id is required');
   }
 
-  const task = await getTaskById(taskId);
+  const task = await getTaskById(taskId, userId);
 
   if (!task) {
     throw new HttpError(404, 'Task not found');
@@ -99,7 +81,7 @@ export const deleteTaskById = async (taskId: string) => {
 
   await prisma.task.delete({
     where: {
-      userId: user.id,
+      userId: userId,
       id: taskId,
     },
   });

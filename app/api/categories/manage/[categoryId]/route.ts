@@ -15,7 +15,13 @@ export async function DELETE(
   const path = new URL(url).pathname;
   const categoryId = (await params).categoryId;
   try {
-    await deleteCategoryById(categoryId);
+    const userId = req.headers.get('x-user-id');
+
+    if (!userId) {
+      throw new HttpError(401, 'Unauthorized');
+    }
+
+    await deleteCategoryById(categoryId, userId);
 
     return NextResponse.json(
       {
@@ -56,8 +62,14 @@ export async function PATCH(
   const categoryId = (await params).categoryId;
 
   try {
+    const userId = req.headers.get('x-user-id');
+
+    if (!userId) {
+      throw new HttpError(401, 'Unauthorized');
+    }
+
     const body = await safeJson(req);
-    const updatedCategory = updateCategoryById(categoryId, body);
+    const updatedCategory = updateCategoryById(categoryId, userId, body);
 
     return NextResponse.json(
       {

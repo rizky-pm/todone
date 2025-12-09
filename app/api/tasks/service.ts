@@ -1,37 +1,34 @@
-import { getCurrentUser } from '@/app/lib/auth';
 import { prisma } from '@/app/lib/db';
 import { TaskStatus } from '@/app/types';
+import { HttpError } from '@/lib/errors';
 import { Prisma } from '@/src/generated/client';
 import { TaskPriority } from '@/src/generated/enums';
 import dayjs from 'dayjs';
 
-export const getTasks = async ({
-  page,
-  limit,
-  categoryId,
-  status,
-  priority,
-}: {
-  page: number;
-  limit: number;
-  status?: TaskStatus | undefined;
-  categoryId?: string | undefined;
-  priority?: TaskPriority | undefined;
-}) => {
-  const user = await getCurrentUser();
-
-  if (!user) {
-    throw new Error('Unauthorized');
-  }
-
+export const getTasks = async (
+  {
+    page,
+    limit,
+    categoryId,
+    status,
+    priority,
+  }: {
+    page: number;
+    limit: number;
+    status?: TaskStatus | undefined;
+    categoryId?: string | undefined;
+    priority?: TaskPriority | undefined;
+  },
+  userId: string
+) => {
   if (page < 1 || limit < 1) {
-    throw new Error('invalid-pagination-values');
+    throw new HttpError(400, 'Bad request, invalid page and limit value');
   }
 
   const skip = (page - 1) * limit;
 
   const whereOptions: Prisma.TaskWhereInput = {
-    userId: user.id,
+    userId: userId,
   };
 
   const now = dayjs().toDate();
@@ -96,30 +93,30 @@ export const getTasks = async ({
   };
 };
 
-export const createTask = async (payload: {
-  title: string;
-  description?: string;
-  categoryId: string;
-  priority: TaskPriority;
-  dueDate: Date;
-}) => {
-  const user = await getCurrentUser();
-
-  if (!user) {
-    throw new Error('Unauthorized');
-  }
-
+export const createTask = async (
+  payload: {
+    title: string;
+    description?: string;
+    categoryId: string;
+    priority: TaskPriority;
+    dueDate: Date;
+  },
+  userId: string
+) => {
   const { title, description, categoryId, priority, dueDate } = payload;
 
   if (!title || !categoryId || !priority || !dueDate) {
-    throw new Error('invalid-payload-values');
+    throw new HttpError(
+      400,
+      'Bad request, title, category id, priority and due date is required'
+    );
   }
 
   const task = await prisma.task.create({
     data: {
       ...payload,
       description: description ?? null,
-      userId: user.id,
+      userId: userId,
     },
   });
 
