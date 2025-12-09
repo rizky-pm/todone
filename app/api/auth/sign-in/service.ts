@@ -36,12 +36,15 @@ export const signInUser = async (payload: {
     },
   });
 
-  response.headers.set(
-    'Set-Cookie',
-    `token=${token}; HttpOnly; Path=/; Max-Age=3600; SameSite=Lax; Secure=${
-      process.env.NODE_ENV === 'production'
-    }`
-  );
+  response.cookies.set({
+    name: 'token',
+    value: token,
+    httpOnly: true,
+    path: '/',
+    maxAge: 60 * 60, // 1 hour
+    sameSite: 'lax',
+    secure: process.env.NODE_ENV === 'production',
+  });
 
   return response;
 };

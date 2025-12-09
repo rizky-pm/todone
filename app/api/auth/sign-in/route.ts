@@ -1,36 +1,18 @@
 import { NextResponse, NextRequest } from 'next/server';
 import { signInUser } from './service';
-import { HttpError } from '@/lib/errors';
 
 export async function POST(req: NextRequest) {
-  const url = req.url;
-  const path = new URL(url).pathname;
-
   try {
-    const body = await req.json();
+    const payload = await req.json();
 
-    const response = await signInUser(body);
+    const response = await signInUser(payload);
 
-    return NextResponse.json(
-      {
-        success: true,
-        message: `Success sign in user`,
-        data: response,
-      },
-      { status: 200 }
-    );
+    return response;
   } catch (error) {
-    console.error(`${req.method} ${path} error:`, error);
-
-    if (error instanceof HttpError) {
-      return NextResponse.json(
-        { error: error.message },
-        { status: error.status }
-      );
-    }
-
+    console.error('Sign in error:', error);
+    console.error(error);
     return NextResponse.json(
-      { message: 'Internal server error' },
+      { message: 'Something went wrong' },
       { status: 500 }
     );
   }

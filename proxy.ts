@@ -9,22 +9,21 @@ export function proxy(req: NextRequest) {
   const isAuthRoute = pathname === '/sign-in' || pathname === '/sign-up';
   const isApiRoute = pathname.startsWith('/api');
 
-  // 1) Allow auth endpoints unprotected
+  // Allow auth endpoints unprotected
   if (pathname.startsWith('/api/auth')) {
     return NextResponse.next();
   }
 
-  // 2) Extract user from token
   const user = verifyToken(token);
 
-  // 3) If token exists but is invalid/expired → clear cookie + force sign-in
+  // If token exists but is invalid/expired -> clear cookie + force sign-in
   if (token && !user) {
     const res = NextResponse.redirect(new URL('/sign-in', req.url));
     res.cookies.delete('token');
     return res;
   }
 
-  // 4) If NOT logged in
+  // If NOT logged in
   if (!user) {
     // allow visiting /sign-in and /sign-up without redirect loop
     if (isAuthRoute) return NextResponse.next();
@@ -34,12 +33,12 @@ export function proxy(req: NextRequest) {
     return res;
   }
 
-  // 5) If logged in but tries to access /sign-in or /sign-up → redirect to dashboard
+  // If logged in but tries to access /sign-in or /sign-up -> redirect to dashboard
   if (isAuthRoute) {
     return NextResponse.redirect(new URL('/dashboard', req.url));
   }
 
-  // 6) If route is an API path → attach userId to request
+  // 6) If route is an API path -> attach userId to request
   if (isApiRoute) {
     const requestHeaders = new Headers(req.headers);
     requestHeaders.set('x-user-id', user.id);
@@ -51,7 +50,7 @@ export function proxy(req: NextRequest) {
     });
   }
 
-  // 7) All other authenticated pages → allow
+  // 7) All other authenticated pages -> allow
   return NextResponse.next();
 }
 
