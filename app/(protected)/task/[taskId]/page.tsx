@@ -2,14 +2,22 @@ import { TypographyH3, TypographyP } from '@/components/ui/typography';
 import TaskForm from '../TaskForm';
 import { getTaskById } from '@/app/api/tasks/[taskId]/service';
 import TaskActions from './TaskActions';
+import { getCurrentUser } from '@/app/lib/auth';
+import { redirect } from 'next/navigation';
 
 const TaskDetail = async ({
   params,
 }: {
   params: Promise<{ taskId: string }>;
 }) => {
+  const user = await getCurrentUser();
+
+  if (!user) {
+    redirect('/sign-in');
+  }
+
   const taskId = (await params).taskId;
-  const task = await getTaskById(taskId);
+  const task = await getTaskById(taskId, user.id);
 
   return (
     <section className='flex flex-col gap-4 my-6  shadow-sm rounded-lg p-4'>
