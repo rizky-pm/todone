@@ -1,6 +1,6 @@
 import { HttpError } from '@/lib/errors';
 import { NextRequest, NextResponse } from 'next/server';
-import { updateUser } from './service';
+import { deleteAccount, updateUser } from './service';
 import { safeJson } from '@/app/lib/parsers';
 import { getCurrentUser } from '@/app/lib/auth';
 
@@ -56,6 +56,47 @@ export async function GET(req: NextRequest) {
       },
       { status: 200 }
     );
+  } catch (error) {
+    console.error(`${req.method} ${path} error:`, error);
+
+    if (error instanceof HttpError) {
+      return NextResponse.json(
+        { error: error.message },
+        { status: error.status }
+      );
+    }
+
+    return NextResponse.json(
+      { message: 'Internal server error' },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(req: NextRequest) {
+  const url = req.url;
+  const path = new URL(url).pathname;
+
+  try {
+    const userId = req.headers.get('x-user-id');
+
+    if (!userId) {
+      throw new HttpError(401, 'Unauthorized');
+    }
+
+    await deleteAccount(userId);
+
+    const res = NextResponse.json({});
+
+    res.cookies.set({
+      name: 'token',
+      value: '',
+      httpOnly: true,
+      path: '/',
+      maxAge: 0,
+    });
+
+    return res;
   } catch (error) {
     console.error(`${req.method} ${path} error:`, error);
 

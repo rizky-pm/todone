@@ -58,3 +58,14 @@ export const useChangePasswordMutation = () => {
     },
   });
 };
+
+export const useDeletAccountMutation = () => {
+  return useMutation({
+    mutationKey: ['user.delete-account'],
+    mutationFn: async () => {
+      const response = await api.delete('/api/users');
+
+      return response.data;
+    },
+  });
+};

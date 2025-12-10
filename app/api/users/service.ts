@@ -34,3 +34,27 @@ export const updateUser = async (
 
   return updatedUser;
 };
+
+export const deleteAccount = async (userId: string) => {
+  const user = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+  });
+
+  if (!user) {
+    throw new HttpError(404, 'User not found');
+  }
+
+  if (user.imageKey) {
+    await utapi.deleteFiles(user.imageKey);
+  }
+
+  await prisma.$transaction([
+    prisma.task.deleteMany({ where: { userId } }),
+    prisma.category.deleteMany({ where: { userId } }),
+    prisma.user.delete({ where: { id: userId } }),
+  ]);
+
+  return { success: true };
+};
