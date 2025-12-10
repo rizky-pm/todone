@@ -44,3 +44,17 @@ export const useGetCurrentUserQuery = (params?: {
     staleTime: 500,
   });
 };
+
+export const useChangePasswordMutation = () => {
+  return useMutation({
+    mutationKey: ['user.change-password'],
+    mutationFn: async (payload: {
+      oldPassword: string;
+      newPassword: string;
+    }) => {
+      const response = await api.patch('/api/users/change-password', payload);
+
+      return response.data;
+    },
+  });
+};

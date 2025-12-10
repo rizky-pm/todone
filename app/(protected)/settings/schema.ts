@@ -43,45 +43,34 @@ export const profileFormSchema = z.object({
 
 export const passwordFormSchema = z
   .object({
-    password: z
-      .string()
-      .min(1, {
-        error: (issue) => {
-          if (issue.code === 'too_small') {
-            return 'Password is required';
-          }
-        },
-      })
-      .max(50, {
-        error: (issue) => {
-          if (issue.code === 'too_big') {
-            return 'Maximum 50 characters allowed';
-          }
-        },
-      }),
-    passwordConfirm: z
-      .string()
-      .min(1, {
-        error: (issue) => {
-          if (issue.code === 'too_small') {
-            return 'Password confirmation is required';
-          }
-        },
-      })
-      .max(50, {
-        error: (issue) => {
-          if (issue.code === 'too_big') {
-            return 'Maximum 50 characters allowed';
-          }
-        },
-      }),
+    oldPassword: z.string().min(6, {
+      error: (issue) => {
+        if (issue.code === 'too_small') {
+          return 'Password must be at least 6 characters';
+        }
+      },
+    }),
+    newPassword: z.string().min(6, {
+      error: (issue) => {
+        if (issue.code === 'too_small') {
+          return 'Password must be at least 6 characters';
+        }
+      },
+    }),
+    newPasswordConfirm: z.string().min(6, {
+      error: (issue) => {
+        if (issue.code === 'too_small') {
+          return 'Password must be at least 6 characters';
+        }
+      },
+    }),
   })
-  .superRefine(({ password, passwordConfirm }, ctx) => {
-    if (password !== passwordConfirm) {
+  .superRefine(({ newPassword, newPasswordConfirm }, ctx) => {
+    if (newPassword !== newPasswordConfirm) {
       ctx.addIssue({
         code: 'custom',
         message: 'Passwords do not match',
-        path: ['passwordConfirm'],
+        path: ['newPasswordConfirm'],
       });
     }
   });

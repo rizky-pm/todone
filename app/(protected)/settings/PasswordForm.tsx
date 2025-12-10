@@ -12,20 +12,68 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { TypographyH3, TypographyH4 } from '@/components/ui/typography';
+import { TypographyH4 } from '@/components/ui/typography';
 import { Button } from '@/components/ui/button';
+import { useState } from 'react';
+
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+  InputGroupText,
+  InputGroupTextarea,
+} from '@/components/ui/input-group';
+import { Eye, EyeClosed, Lock } from 'lucide-react';
+import { useChangePasswordMutation } from '@/app/services/user';
+import { toast } from 'sonner';
+import axios from 'axios';
+import { Spinner } from '@/components/ui/spinner';
 
 const PasswordForm = () => {
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [isNewPasswordVisible, setIsNewPasswordVisible] = useState(false);
+  const [
+    isNewPasswordConfirmationVisible,
+    setIsNewPasswordConfirmationVisible,
+  ] = useState(false);
+
   const form = useForm<TypePasswordFormSchema>({
     resolver: zodResolver(passwordFormSchema),
     defaultValues: {
-      password: '',
-      passwordConfirm: '',
+      oldPassword: '',
+      newPassword: '',
+      newPasswordConfirm: '',
     },
   });
 
+  const { mutateAsync: changePassword, isPending: changingPassword } =
+    useChangePasswordMutation();
+
+  const onReset = () => {
+    form.reset();
+  };
+
   const onSubmit = (values: TypePasswordFormSchema) => {
-    console.log(values);
+    const payload = {
+      oldPassword: values.oldPassword,
+      newPassword: values.newPassword,
+    };
+
+    changePassword(payload, {
+      onSuccess: (response) => {
+        toast.success(response.message, {
+          duration: 4000,
+        });
+      },
+      onError: (error) => {
+        if (axios.isAxiosError(error)) {
+          const errorMessage = error.response?.data.error;
+          toast.error(errorMessage);
+          console.error('Error: ', error);
+        }
+      },
+    });
   };
 
   return (
@@ -35,16 +83,29 @@ const PasswordForm = () => {
         <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
           <FormField
             control={form.control}
-            name='password'
+            name='oldPassword'
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Password</FormLabel>
+                <FormLabel>Current Password</FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder='Enter password...'
-                    {...field}
-                    type='password'
-                  />
+                  <InputGroup>
+                    <InputGroupInput
+                      placeholder='Enter current password...'
+                      type={isPasswordVisible ? 'text' : 'password'}
+                      autoComplete='off'
+                      {...field}
+                    />
+
+                    <InputGroupAddon
+                      align='inline-end'
+                      className='cursor-pointer'
+                      onClick={() => {
+                        setIsPasswordVisible((prevState) => !prevState);
+                      }}
+                    >
+                      {!isPasswordVisible ? <Eye /> : <EyeClosed />}
+                    </InputGroupAddon>
+                  </InputGroup>
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -53,26 +114,92 @@ const PasswordForm = () => {
 
           <FormField
             control={form.control}
-            name='passwordConfirm'
+            name='newPassword'
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Password Confirmation</FormLabel>
+                <FormLabel>New Password</FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder='Enter password confirmation...'
-                    {...field}
-                    type='passwordConfirm'
-                  />
+                  <InputGroup>
+                    <InputGroupInput
+                      placeholder='Enter new password...'
+                      type={isNewPasswordVisible ? 'text' : 'password'}
+                      autoComplete='off'
+                      {...field}
+                    />
+
+                    <InputGroupAddon
+                      align='inline-end'
+                      className='cursor-pointer'
+                      onClick={() => {
+                        setIsNewPasswordVisible((prevState) => !prevState);
+                      }}
+                    >
+                      {!isNewPasswordVisible ? <Eye /> : <EyeClosed />}
+                    </InputGroupAddon>
+                  </InputGroup>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name='newPasswordConfirm'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>New Password Confirmation</FormLabel>
+                <FormControl>
+                  <InputGroup>
+                    <InputGroupInput
+                      placeholder='Enter new password confirmation...'
+                      type={
+                        isNewPasswordConfirmationVisible ? 'text' : 'password'
+                      }
+                      autoComplete='off'
+                      {...field}
+                    />
+
+                    <InputGroupAddon
+                      align='inline-end'
+                      className='cursor-pointer'
+                      onClick={() => {
+                        setIsNewPasswordConfirmationVisible(
+                          (prevState) => !prevState
+                        );
+                      }}
+                    >
+                      {!isNewPasswordConfirmationVisible ? (
+                        <Eye />
+                      ) : (
+                        <EyeClosed />
+                      )}
+                    </InputGroupAddon>
+                  </InputGroup>
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
           <div className='text-right space-x-2'>
-            <Button type='reset' variant={'outline'}>
+            <Button
+              type='reset'
+              variant={'outline'}
+              disabled={changingPassword}
+              onClick={onReset}
+            >
               Reset
             </Button>
-            <Button type='submit'>Save</Button>
+            <Button type='submit' disabled={changingPassword}>
+              {changingPassword ? (
+                <>
+                  <Spinner />
+                  Changing Password
+                </>
+              ) : (
+                'Change Password'
+              )}
+            </Button>
           </div>
         </form>
       </Form>

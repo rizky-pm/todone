@@ -55,7 +55,8 @@ const SignInForm = () => {
       },
       onError: (error) => {
         if (axios.isAxiosError(error)) {
-          toast.error(error.response?.data.message);
+          const errorMessage = error.response?.data.error;
+          toast.error(errorMessage);
           console.error('Error: ', error);
         }
       },

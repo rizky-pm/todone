@@ -1,16 +1,23 @@
-import { NextResponse, NextRequest } from 'next/server';
-import { signInUser } from './service';
+import { safeJson } from '@/app/lib/parsers';
 import { HttpError } from '@/lib/errors';
+import { NextRequest, NextResponse } from 'next/server';
+import { changePassword } from './service';
 
-export async function POST(req: NextRequest) {
+export async function PATCH(req: NextRequest) {
   const url = req.url;
   const path = new URL(url).pathname;
+
   try {
-    const payload = await req.json();
+    const userId = req.headers.get('x-user-id');
+    const body = await safeJson(req);
 
-    const response = await signInUser(payload);
+    if (!userId) {
+      throw new HttpError(401, 'Unauthorized');
+    }
 
-    return response;
+    const userNewPassword = await changePassword(body, userId);
+
+    return userNewPassword;
   } catch (error) {
     console.error(`${req.method} ${path} error:`, error);
 
