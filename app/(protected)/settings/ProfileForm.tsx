@@ -66,6 +66,10 @@ const ProfileForm = (props: IProps) => {
         'x-user-id': id,
       },
       onUploadError: (error) => {
+        if (files[0].size >= 512000) {
+          toast.error('Image size limit exceeded, max image size is 512Kb');
+          return;
+        }
         toast.error(error.message);
       },
     }
@@ -103,31 +107,39 @@ const ProfileForm = (props: IProps) => {
       imageKey: undefined,
     };
 
+    const saveUser = async () => {
+      updateUser(payload, {
+        onSuccess: (response) => {
+          toast.success(response.message, {
+            duration: 4000,
+          });
+          setUser(response.data);
+          queryClient.invalidateQueries({ queryKey: ['user.get'] });
+        },
+        onError: (error) => {
+          if (axios.isAxiosError(error)) {
+            const errorMessage = error.response?.data.error;
+            toast.error(errorMessage);
+            console.error('Error: ', error);
+          }
+        },
+      });
+    };
+
     if (files.length > 0) {
       const response = await startUpload(files);
 
       if (response) {
         payload.image = response[0].ufsUrl;
         payload.imageKey = response[0].key;
+
+        await saveUser();
       }
+
+      return;
     }
 
-    updateUser(payload, {
-      onSuccess: (response) => {
-        toast.success(response.message, {
-          duration: 4000,
-        });
-        setUser(response.data);
-        queryClient.invalidateQueries({ queryKey: ['user.get'] });
-      },
-      onError: (error) => {
-        if (axios.isAxiosError(error)) {
-          const errorMessage = error.response?.data.error;
-          toast.error(errorMessage);
-          console.error('Error: ', error);
-        }
-      },
-    });
+    await saveUser();
   };
 
   const fullNameFallback = useMemo(() => {
