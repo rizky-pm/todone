@@ -1,4 +1,3 @@
-import { TypographyH3, TypographyP } from '@/components/ui/typography';
 import ProfileForm from './ProfileForm';
 import { getCurrentUser } from '@/app/lib/auth';
 import { redirect } from 'next/navigation';
@@ -12,17 +11,11 @@ const Settings = async () => {
   }
 
   return (
-    <section className='flex flex-col gap-4 my-6'>
-      <div>
-        <TypographyH3>Account Settings</TypographyH3>
-        <TypographyP>
-          Update your profile details, change your password, and manage your
-          account settings, including deleting your account.
-        </TypographyP>
+    <section className='flex flex-col justify-center items-center gap-4 my-6'>
+      <div className='w-2xl space-y-4 '>
+        <ProfileForm initialData={user} />
+        <PasswordForm />
       </div>
-
-      <ProfileForm initialData={user} />
-      <PasswordForm />
     </section>
   );
 };
