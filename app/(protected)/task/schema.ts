@@ -14,7 +14,7 @@ export const taskFormSchema = z.object({
     .max(50, {
       error: (issue) => {
         if (issue.code === 'too_big') {
-          return 'Maximum 20 characters allowed.';
+          return 'Maximum 50 characters allowed.';
         }
       },
     }),

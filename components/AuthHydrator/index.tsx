@@ -1,11 +1,11 @@
 'use client';
 
 import { useAuthStore } from '@/app/store/auth.store';
-import { IUser } from '@/app/types';
+import { User } from '@/src/generated/client';
 import { useEffect } from 'react';
 
 interface IProps {
-  user: IUser | null;
+  user: Pick<User, 'id' | 'email' | 'fullName' | 'image'> | null;
 }
 
 const AuthHydrator = (props: IProps) => {

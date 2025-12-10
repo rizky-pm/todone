@@ -10,7 +10,10 @@ export function proxy(req: NextRequest) {
   const isApiRoute = pathname.startsWith('/api');
 
   // Allow auth endpoints unprotected
-  if (pathname.startsWith('/api/auth')) {
+  if (
+    pathname.startsWith('/api/auth') ||
+    pathname.startsWith('/api/uploadthing')
+  ) {
     return NextResponse.next();
   }
 

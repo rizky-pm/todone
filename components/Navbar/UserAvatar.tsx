@@ -48,8 +48,8 @@ const UserAvatar = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Avatar className='h-10 w-10 rounded-full grayscale'>
-          <AvatarImage />
+        <Avatar className='h-10 w-10 rounded-full'>
+          <AvatarImage src={user?.image ?? ''} />
           <AvatarFallback className='rounded-full'>
             {fullNameFallback}
           </AvatarFallback>

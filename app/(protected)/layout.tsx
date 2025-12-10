@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import Navbar from '@/components/Navbar';
 import { getCurrentUser } from '../lib/auth';
 import AuthHydrator from '@/components/AuthHydrator';
+import { redirect } from 'next/navigation';
 
 export const metadata: Metadata = {
   title: 'Todone',
@@ -15,6 +16,10 @@ export default async function DashboardLayout({
   children: React.ReactNode;
 }>) {
   const user = await getCurrentUser();
+
+  if (!user) {
+    redirect('/sign-in');
+  }
 
   return (
     <>

@@ -1,11 +1,11 @@
 'use client';
 
 import { create } from 'zustand';
-import { IUser } from '../types';
+import { User } from '@/src/generated/client';
 
 interface IAuthState {
-  user: IUser | null;
-  setUser: (user: IUser) => void;
+  user: Pick<User, 'id' | 'email' | 'fullName' | 'image'> | null;
+  setUser: (user: Pick<User, 'id' | 'email' | 'fullName' | 'image'>) => void;
 }
 
 export const useAuthStore = create<IAuthState>((set) => ({
