@@ -44,8 +44,9 @@ const ProfileForm = (props: IProps) => {
 
   const queryClient = useQueryClient();
 
-  const { data: currentUserQuery, isFetching: gettingCurrentUser } =
-    useGetCurrentUserQuery({ initialData: props.initialData });
+  const { data: currentUserQuery } = useGetCurrentUserQuery({
+    initialData: props.initialData,
+  });
 
   const { mutateAsync: updateUser, isPending: updatingUser } =
     useUpdateUserMutation();
