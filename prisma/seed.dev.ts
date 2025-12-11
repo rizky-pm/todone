@@ -2,6 +2,7 @@ import { hashPassword } from '@/app/lib/auth';
 import { prisma } from '../app/lib/db';
 import { faker } from '@faker-js/faker';
 import 'dotenv/config';
+import dayjs from 'dayjs';
 
 async function main() {
   console.log('Seeding development data...');
@@ -51,7 +52,7 @@ async function main() {
       const category = await prisma.category.create({
         data: {
           name: faker.commerce.department(),
-          color: faker.color.rgb(), // or faker.internet.color()
+          color: faker.color.rgb(),
           userId: user.id,
         },
       });
@@ -74,17 +75,17 @@ async function main() {
           title: faker.lorem.sentence(),
           description: faker.lorem.paragraph(),
           dueDate: faker.date.between({
-            from: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // past 7 days
-            to: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // next 7 days
+            from: dayjs().subtract(7, 'days').toDate(),
+            to: dayjs().add(7, 'days').toDate(),
           }),
           completedAt: faker.helpers.maybe(() =>
             faker.date.between({
-              from: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // past 7 days
-              to: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // next 7 days
+              from: dayjs().subtract(7, 'days').toDate(),
+              to: dayjs().add(7, 'days').toDate(),
             })
           ),
           priority: faker.helpers.arrayElement(['LOW', 'MEDIUM', 'HIGH']),
-          userId: category.userId!, // each category belongs to exactly one user
+          userId: category.userId!,
           categoryId: category.id,
         },
       });
