@@ -1,7 +1,7 @@
 'use client';
 
 import { create } from 'zustand';
-import { TaskPriority } from '@/src/generated/enums';
+import { TaskPriority } from '@prisma/client';
 import { TaskStatus } from '../types';
 
 export interface IFilterState {

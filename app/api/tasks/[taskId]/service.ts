@@ -1,6 +1,6 @@
 import { prisma } from '@/app/lib/db';
 import { HttpError } from '@/lib/errors';
-import { TaskPriority } from '@/src/generated/enums';
+import { TaskPriority } from '@prisma/client';
 
 export const getTaskById = async (taskId: string, userId: string) => {
   if (!taskId) {

@@ -1,6 +1,6 @@
 // prisma/seed.test.ts
 
-import { TaskPriority } from '@/src/generated/enums';
+import { TaskPriority } from '@prisma/client';
 import { prisma } from '../app/lib/db';
 import bcrypt from 'bcrypt';
 import 'dotenv/config';

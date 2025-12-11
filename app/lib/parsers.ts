@@ -1,4 +1,4 @@
-import { TaskPriority } from '@/src/generated/enums';
+import { TaskPriority } from '@prisma/client';
 import { TaskStatus } from '@/app/types';
 import { NextRequest } from 'next/server';
 

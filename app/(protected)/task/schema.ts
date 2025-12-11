@@ -1,4 +1,4 @@
-import { TaskPriority } from '@/src/generated/enums';
+import { TaskPriority } from '@prisma/client';
 import { z } from 'zod';
 
 export const taskFormSchema = z.object({

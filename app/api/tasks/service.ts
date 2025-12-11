@@ -2,7 +2,7 @@ import { prisma } from '@/app/lib/db';
 import { TaskStatus } from '@/app/types';
 import { HttpError } from '@/lib/errors';
 import { Prisma } from '@/src/generated/client';
-import { TaskPriority } from '@/src/generated/enums';
+import { TaskPriority } from '@prisma/client';
 import dayjs from 'dayjs';
 
 export const getTasks = async (
