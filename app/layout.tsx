@@ -13,7 +13,7 @@ const stackSans = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: 'Todone',
+  title: 'Todone | Organize your life, one task at time',
   description: 'Organize your life, one task at time',
 };
 

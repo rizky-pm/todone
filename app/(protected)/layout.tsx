@@ -5,7 +5,7 @@ import AuthHydrator from '@/components/AuthHydrator';
 import { redirect } from 'next/navigation';
 
 export const metadata: Metadata = {
-  title: 'Todone',
+  title: 'Todone | Organize your life, one task at time',
   description: 'Organize your life, one task at time',
 };
 
