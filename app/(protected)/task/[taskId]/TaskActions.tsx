@@ -12,6 +12,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
+import { useBreakpoints } from '@/hooks/useBreakpoints';
 import { useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { Check, Trash } from 'lucide-react';
@@ -21,6 +22,7 @@ import { toast } from 'sonner';
 const TaskActions = ({ taskId }: { taskId: string }) => {
   const queryClient = useQueryClient();
   const router = useRouter();
+  const { isLargeScreen } = useBreakpoints();
   const { mutateAsync: updateTask } = useUpdateTask();
   const { mutateAsync: deleteTask } = useDeleteTask();
 
@@ -75,7 +77,10 @@ const TaskActions = ({ taskId }: { taskId: string }) => {
       <div className='space-x-2'>
         <Dialog>
           <DialogTrigger asChild>
-            <Button size={'icon'} variant={'destructive'}>
+            <Button
+              size={isLargeScreen ? 'default' : 'icon-sm'}
+              variant={'destructive'}
+            >
               <Trash />
             </Button>
           </DialogTrigger>
@@ -98,7 +103,10 @@ const TaskActions = ({ taskId }: { taskId: string }) => {
           </DialogContent>
         </Dialog>
 
-        <Button size={'icon'} onClick={onClickComplete}>
+        <Button
+          size={isLargeScreen ? 'default' : 'icon-sm'}
+          onClick={onClickComplete}
+        >
           <Check />
         </Button>
       </div>

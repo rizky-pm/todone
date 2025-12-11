@@ -39,6 +39,7 @@ import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import { Task } from '@/src/generated/client';
 import { TypographyMuted } from '@/components/ui/typography';
+import { useBreakpoints } from '@/hooks/useBreakpoints';
 
 interface IProps {
   initialData: Task | null;
@@ -57,6 +58,7 @@ const TaskForm = ({ initialData }: IProps) => {
   });
 
   const router = useRouter();
+  const { isLargeScreen } = useBreakpoints();
 
   const { mutateAsync: createTask, isPending: creatingTask } =
     useCreateTaskMutation();
@@ -130,7 +132,10 @@ const TaskForm = ({ initialData }: IProps) => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className='task-form'>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className={`${isLargeScreen ? 'task-form' : 'space-y-4'}`}
+      >
         <div className='t-title'>
           <FormField
             control={form.control}

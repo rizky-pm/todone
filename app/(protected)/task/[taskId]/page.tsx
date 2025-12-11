@@ -20,16 +20,19 @@ const TaskDetail = async ({
   const task = await getTaskById(taskId, user.id);
 
   return (
-    <section className='flex flex-col gap-4 my-6  shadow-sm rounded-lg p-4'>
+    <section className='flex flex-col gap-4 my-6 shadow-sm rounded-lg p-4'>
       <div className='flex justify-between'>
-        <div>
-          <TypographyH3>Task Overview</TypographyH3>
-          <TypographyP>
+        <div className='w-full'>
+          <div className='flex justify-between w-full'>
+            <TypographyH3>Task Overview</TypographyH3>
+
+            <TaskActions taskId={taskId} />
+          </div>
+          <TypographyP className='mt-4 md:mt-0'>
             Review the information below to see full details related to this
             task.
           </TypographyP>
         </div>
-        <TaskActions taskId={taskId} />
       </div>
       <TaskForm initialData={task} />
     </section>
