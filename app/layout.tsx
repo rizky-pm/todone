@@ -5,6 +5,8 @@ import Providers from './providers';
 import { NextSSRPlugin } from '@uploadthing/react/next-ssr-plugin';
 import { extractRouterConfig } from 'uploadthing/server';
 import { ourFileRouter } from '@/app/api/uploadthing/core';
+import LandingPageNavbar from '@/components/LandingPageNavbar';
+import Navbar from '@/components/Navbar';
 
 const stackSans = Plus_Jakarta_Sans({
   variable: '--font-body',
@@ -33,7 +35,13 @@ export default function RootLayout({
            */
           routerConfig={extractRouterConfig(ourFileRouter)}
         />
-        <Providers>{children}</Providers>
+
+        <section className='flex items-center justify-center flex-col'>
+          <Providers>
+            <Navbar />
+            {children}
+          </Providers>
+        </section>
       </body>
     </html>
   );

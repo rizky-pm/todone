@@ -25,10 +25,7 @@ export default async function DashboardLayout({
     <>
       <AuthHydrator user={user} />
       <section className='flex items-center justify-center'>
-        <div className='w-5xl'>
-          <Navbar />
-          {children}
-        </div>
+        <div className='w-5xl'>{children}</div>
       </section>
     </>
   );
