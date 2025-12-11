@@ -1,6 +1,5 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { columns } from './columns';
 import { DataTable } from './data-table';
 import { TaskWithCategory, useGetTaskQuery } from '@/app/services/tasks';
