@@ -1,8 +1,10 @@
-import ProfileForm from './ProfileForm';
 import { getCurrentUser } from '@/app/lib/auth';
 import { redirect } from 'next/navigation';
-import PasswordForm from './PasswordForm';
-import DangerZone from './DangerZone';
+import dynamic from 'next/dynamic';
+
+const ProfileForm = dynamic(() => import('./ProfileForm'));
+const PasswordForm = dynamic(() => import('./PasswordForm'));
+const DangerZone = dynamic(() => import('./DangerZone'));
 
 const Settings = async () => {
   const user = await getCurrentUser();

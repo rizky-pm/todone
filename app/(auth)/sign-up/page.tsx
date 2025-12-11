@@ -6,7 +6,9 @@ import {
   TypographyP,
 } from '@/components/ui/typography';
 import { useRouter } from 'next/navigation';
-import SignUpForm from './SignUpForm';
+import dynamic from 'next/dynamic';
+
+const SignUpForm = dynamic(() => import('./SignUpForm'));
 
 const SignUpPage = () => {
   const router = useRouter();

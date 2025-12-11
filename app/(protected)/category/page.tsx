@@ -1,7 +1,9 @@
 import { getCategoriesManage } from '@/app/api/categories/manage/service';
 import { getCurrentUser } from '@/app/lib/auth';
-import CategoryTable from '@/components/CategoryTable';
+import dynamic from 'next/dynamic';
 import { redirect } from 'next/navigation';
+
+const CategoryTable = dynamic(() => import('@/components/CategoryTable'));
 
 const CategoryList = async () => {
   const user = await getCurrentUser();

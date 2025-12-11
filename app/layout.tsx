@@ -5,7 +5,7 @@ import Providers from './providers';
 import { NextSSRPlugin } from '@uploadthing/react/next-ssr-plugin';
 import { extractRouterConfig } from 'uploadthing/server';
 import { ourFileRouter } from '@/app/api/uploadthing/core';
-import Navbar from '@/components/Navbar';
+import dynamic from 'next/dynamic';
 
 const stackSans = Plus_Jakarta_Sans({
   variable: '--font-body',
@@ -16,6 +16,8 @@ export const metadata: Metadata = {
   title: 'Todone | Organize your life, one task at time',
   description: 'Organize your life, one task at time',
 };
+
+const Navbar = dynamic(() => import('@/components/Navbar'));
 
 export default function RootLayout({
   children,

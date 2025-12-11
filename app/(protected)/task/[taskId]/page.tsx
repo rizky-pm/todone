@@ -1,9 +1,11 @@
 import { TypographyH3, TypographyP } from '@/components/ui/typography';
-import TaskForm from '../TaskForm';
 import { getTaskById } from '@/app/api/tasks/[taskId]/service';
-import TaskActions from './TaskActions';
 import { getCurrentUser } from '@/app/lib/auth';
 import { redirect } from 'next/navigation';
+import dynamic from 'next/dynamic';
+
+const TaskActions = dynamic(() => import('./TaskActions'));
+const TaskForm = dynamic(() => import('../TaskForm'));
 
 const TaskDetail = async ({
   params,

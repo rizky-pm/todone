@@ -1,5 +1,7 @@
 import { TypographyH3, TypographyP } from '@/components/ui/typography';
-import TaskForm from '../TaskForm';
+import dynamic from 'next/dynamic';
+
+const TaskForm = dynamic(() => import('../TaskForm'));
 
 const Task = () => {
   return (

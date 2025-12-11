@@ -16,6 +16,7 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet';
 import dynamic from 'next/dynamic';
+import Link from 'next/link';
 
 const UserAvatar = dynamic(() => import('./UserAvatar'));
 
@@ -24,8 +25,10 @@ const AuthButtons = () => {
 
   return (
     <div className='space-x-2'>
-      <Button variant='outline' onClick={() => router.push('/sign-in')}>
-        Sign in
+      <Button variant='outline' onClick={() => router.push('/sign-in')} asChild>
+        <Link href={'/sign-in'} prefetch>
+          Sign in
+        </Link>
       </Button>
       <Button onClick={() => router.push('/sign-up')}>Get started</Button>
     </div>

@@ -5,8 +5,10 @@ import {
   TypographyH3,
   TypographyP,
 } from '@/components/ui/typography';
-import SignInForm from './SignInForm';
 import { useRouter } from 'next/navigation';
+import dynamic from 'next/dynamic';
+
+const SignInForm = dynamic(() => import('./SignInForm'));
 
 const SigInPage = () => {
   const router = useRouter();
