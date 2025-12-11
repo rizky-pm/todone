@@ -40,6 +40,7 @@ import axios from 'axios';
 import { Task } from '@prisma/client';
 import { TypographyMuted } from '@/components/ui/typography';
 import { useBreakpoints } from '@/hooks/useBreakpoints';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface IProps {
   initialData: Task | null;
@@ -60,6 +61,7 @@ const TaskForm = ({ initialData }: IProps) => {
   const router = useRouter();
   const { isLargeScreen } = useBreakpoints();
 
+  const queryClient = useQueryClient();
   const { mutateAsync: createTask, isPending: creatingTask } =
     useCreateTaskMutation();
   const { mutateAsync: updateTask, isPending: updatingTask } = useUpdateTask();
@@ -97,6 +99,12 @@ const TaskForm = ({ initialData }: IProps) => {
             });
 
             router.push('/dashboard');
+            queryClient.invalidateQueries({
+              queryKey: ['task-get.summary'],
+            });
+            queryClient.invalidateQueries({
+              queryKey: ['task-get.all'],
+            });
           },
           onError: (error) => {
             if (axios.isAxiosError(error)) {
