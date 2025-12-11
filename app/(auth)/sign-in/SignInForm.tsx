@@ -65,10 +65,6 @@ const SignInForm = () => {
 
   return (
     <Form {...form}>
-      <TypographyH2>Sign in to your account</TypographyH2>
-      <TypographyP className='mt-1'>
-        Enter your credentials to access your tasks.
-      </TypographyP>
       <form onSubmit={form.handleSubmit(onSignIn)} className='space-y-4 mt-8'>
         <FormField
           control={form.control}

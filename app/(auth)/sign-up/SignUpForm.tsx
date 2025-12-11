@@ -21,7 +21,7 @@ import {
 } from '@/components/ui/input-group';
 
 import { Eye, EyeClosed, Lock, Mail } from 'lucide-react';
-import { TypographyH2, TypographyP } from '@/components/ui/typography';
+import { TypographyP } from '@/components/ui/typography';
 import { signUpSchema, TypeSignUpSchema } from './schema';
 import { useState } from 'react';
 import { useSignUpMutation } from '@/app/services/auth';
@@ -66,10 +66,6 @@ const SignUpForm = () => {
 
   return (
     <Form {...form}>
-      <TypographyH2>Create Account</TypographyH2>
-      <TypographyP className='mt-1'>
-        Please fill in the information below to get started
-      </TypographyP>
       <form onSubmit={form.handleSubmit(onSignIn)} className='space-y-4 mt-8'>
         <FormField
           control={form.control}
