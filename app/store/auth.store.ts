@@ -1,7 +1,7 @@
 'use client';
 
 import { create } from 'zustand';
-import { User } from '@/src/generated/client';
+import { User } from '@prisma/client';
 
 interface IAuthState {
   user: Pick<User, 'id' | 'email' | 'fullName' | 'image'> | null;

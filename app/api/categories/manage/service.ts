@@ -1,6 +1,6 @@
 import { prisma } from '@/app/lib/db';
 import { HttpError } from '@/lib/errors';
-import { Category } from '@/src/generated/client';
+import { Category } from '@prisma/client';
 
 export const getCategoriesManage = async (userId: string) => {
   const categories = await prisma.category.findMany({

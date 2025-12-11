@@ -37,7 +37,7 @@ import { useCreateTaskMutation, useUpdateTask } from '@/app/services/tasks';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
-import { Task } from '@/src/generated/client';
+import { Task } from '@prisma/client';
 import { TypographyMuted } from '@/components/ui/typography';
 import { useBreakpoints } from '@/hooks/useBreakpoints';
 

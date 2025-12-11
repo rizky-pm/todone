@@ -1,6 +1,6 @@
 'use client';
 
-import { Prisma } from '@/src/generated/client';
+import { Prisma } from '@prisma/client';
 
 import {
   Table,

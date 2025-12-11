@@ -1,6 +1,6 @@
 'use client';
 
-import { User } from '@/src/generated/client';
+import { User } from '@prisma/client';
 import { ImageUploader } from './ImageUploader';
 import { useMemo, useState } from 'react';
 import { getInitials } from '@/app/lib/string';

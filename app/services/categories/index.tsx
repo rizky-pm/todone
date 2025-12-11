@@ -1,7 +1,7 @@
 import { api } from '@/app/api';
 import { IBaseResponse } from '@/app/types';
 import { CategoryWithTaskCount } from '@/components/CategoryTable';
-import { Category } from '@/src/generated/client';
+import { Category } from '@prisma/client';
 import { useMutation, useQuery } from '@tanstack/react-query';
 
 interface IGetCategoriesResponse extends IBaseResponse {

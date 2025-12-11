@@ -1,6 +1,6 @@
 import { api } from '@/app/api';
 import { IBaseResponse } from '@/app/types';
-import { User } from '@/src/generated/client';
+import { User } from '@prisma/client';
 import { useMutation, useQuery } from '@tanstack/react-query';
 
 export interface IGetCurrentUserResponse extends IBaseResponse {

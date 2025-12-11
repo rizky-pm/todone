@@ -1,7 +1,7 @@
 'use client';
 
 import { useAuthStore } from '@/app/store/auth.store';
-import { User } from '@/src/generated/client';
+import { User } from '@prisma/client';
 import { useEffect } from 'react';
 
 interface IProps {

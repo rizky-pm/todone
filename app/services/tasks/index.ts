@@ -1,7 +1,7 @@
 import { api } from '@/app/api';
 import { IBaseResponse, IPaginationMeta, ISummary } from '@/app/types';
 import { keepPreviousData, useMutation, useQuery } from '@tanstack/react-query';
-import type { Prisma, TaskPriority } from '@/src/generated/client';
+import type { Prisma, TaskPriority } from '@prisma/client';
 import { IFilterState } from '@/app/store/filter.store';
 import _ from 'lodash';
 import { TypeTaskFormSchema } from '@/app/(protected)/task/schema';

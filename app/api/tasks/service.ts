@@ -1,7 +1,7 @@
 import { prisma } from '@/app/lib/db';
 import { TaskStatus } from '@/app/types';
 import { HttpError } from '@/lib/errors';
-import { Prisma } from '@/src/generated/client';
+import { Prisma } from '@prisma/client';
 import { TaskPriority } from '@prisma/client';
 import dayjs from 'dayjs';
 

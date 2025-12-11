@@ -10,7 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Category } from '@/src/generated/client';
+import { Category } from '@prisma/client';
 
 interface IProps {
   initialData: Category[];
