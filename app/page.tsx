@@ -4,15 +4,13 @@ import { Button } from '@/components/ui/button';
 import {
   TypographyH1,
   TypographyH4,
-  TypographyMuted,
   TypographyP,
   TypographySmall,
 } from '@/components/ui/typography';
 import Image from 'next/image';
 
 import TodoDashboard from '@/public/images/dashboard.jpg';
-import { Github, Layers, Linkedin, Mail, RefreshCw, Zap } from 'lucide-react';
-import { Separator } from '@/components/ui/separator';
+import { Layers, RefreshCw, Zap } from 'lucide-react';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
