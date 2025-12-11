@@ -12,8 +12,8 @@ const Settings = async () => {
   }
 
   return (
-    <section className='flex flex-col justify-center items-center gap-4 my-6'>
-      <div className='w-3xl space-y-4 '>
+    <section className='flex flex-col my-6 justify-center items-center'>
+      <div className='w-xs md:w-xl lg:w-xl 2xl:w-3xl space-y-4 '>
         <ProfileForm initialData={user} />
         <PasswordForm />
         <DangerZone />

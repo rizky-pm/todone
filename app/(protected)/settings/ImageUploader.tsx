@@ -40,8 +40,11 @@ export function ImageUploader({
   });
 
   return (
-    <div className='w-40 h-40 cursor-pointer relative' {...getRootProps()}>
-      <Avatar className='rounded-full w-full h-full flex justify-center items-center border'>
+    <div
+      className='w-full flex justify-center cursor-pointer relative'
+      {...getRootProps()}
+    >
+      <Avatar className='rounded-full w-40 h-40 flex justify-center items-center border'>
         <AvatarImage src={src || ''} />
         <AvatarFallback>{fallback}</AvatarFallback>
       </Avatar>

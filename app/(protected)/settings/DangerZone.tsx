@@ -53,7 +53,7 @@ const DangerZone = () => {
     <div className='shadow-sm rounded-lg p-6 space-y-4'>
       <TypographyH4>Danger Zone</TypographyH4>
       <div className='p-4 rounded bg-muted'>
-        <TypographyP>
+        <TypographyP className='text-justify'>
           This section allows you to permanently delete your account. Deleting
           your account is irreversible all your data, including profile
           information and uploaded files, will be permanently removed. Please

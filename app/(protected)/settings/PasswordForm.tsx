@@ -11,7 +11,6 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
 import { TypographyH4 } from '@/components/ui/typography';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
@@ -19,12 +18,9 @@ import { useState } from 'react';
 import {
   InputGroup,
   InputGroupAddon,
-  InputGroupButton,
   InputGroupInput,
-  InputGroupText,
-  InputGroupTextarea,
 } from '@/components/ui/input-group';
-import { Eye, EyeClosed, Lock } from 'lucide-react';
+import { Eye, EyeClosed } from 'lucide-react';
 import { useChangePasswordMutation } from '@/app/services/user';
 import { toast } from 'sonner';
 import axios from 'axios';
@@ -181,16 +177,21 @@ const PasswordForm = () => {
               </FormItem>
             )}
           />
-          <div className='text-right space-x-2'>
+          <div className='flex flex-col gap-2 md:block md:text-right md:space-x-2'>
             <Button
               type='reset'
               variant={'outline'}
               disabled={changingPassword}
               onClick={onReset}
+              className='order-2 md:order-1'
             >
               Reset
             </Button>
-            <Button type='submit' disabled={changingPassword}>
+            <Button
+              type='submit'
+              disabled={changingPassword}
+              className='order-1 md:order-2'
+            >
               {changingPassword ? (
                 <>
                   <Spinner />

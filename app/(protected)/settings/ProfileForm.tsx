@@ -191,16 +191,21 @@ const ProfileForm = (props: IProps) => {
             )}
           />
 
-          <div className='text-right space-x-2'>
+          <div className='flex flex-col gap-2 md:block md:text-right md:space-x-2'>
             <Button
               type='reset'
               variant={'outline'}
               disabled={updatingUser || isUploading}
               onClick={onReset}
+              className='order-2 md:order-1'
             >
               Reset
             </Button>
-            <Button type='submit' disabled={updatingUser || isUploading}>
+            <Button
+              type='submit'
+              disabled={updatingUser || isUploading}
+              className='order-1 md:order-2'
+            >
               {updatingUser || isUploading ? (
                 <>
                   <Spinner /> Saving
