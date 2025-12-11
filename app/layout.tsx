@@ -5,7 +5,6 @@ import Providers from './providers';
 import { NextSSRPlugin } from '@uploadthing/react/next-ssr-plugin';
 import { extractRouterConfig } from 'uploadthing/server';
 import { ourFileRouter } from '@/app/api/uploadthing/core';
-import LandingPageNavbar from '@/components/LandingPageNavbar';
 import Navbar from '@/components/Navbar';
 
 const stackSans = Plus_Jakarta_Sans({
