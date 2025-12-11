@@ -32,3 +32,4 @@ A modern task-management app built with Next.js, PostgreSQL, Prisma, and shadcn/
 - Form validation (Zod + React Hook Form)  
 - Smart data caching (React Query)
 - Minimalist and modern responsive design UI
+- Access task from any device and any where
