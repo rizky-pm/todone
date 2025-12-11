@@ -86,7 +86,7 @@ const Navbar = () => {
       <div className='w-xs md:w-xl lg:w-5xl flex justify-between items-center'>
         <div className='flex flex-col'>
           <NavbarTitle />
-          {!isLandingPage && <NavbarDescription />}
+          {!isLandingPage && isMediumScreen && <NavbarDescription />}
         </div>
 
         {isLandingPage ? (
@@ -98,8 +98,11 @@ const Navbar = () => {
         ) : (
           <div className='flex items-center gap-4'>
             {!pathname.includes('/task') && (
-              <Button onClick={() => router.push('/task/create-new')}>
-                <Plus /> Add Task
+              <Button
+                onClick={() => router.push('/task/create-new')}
+                size={isMediumScreen ? 'default' : 'icon-sm'}
+              >
+                <Plus /> {isMediumScreen ? 'Add Task' : ''}
               </Button>
             )}
             <UserAvatar />

@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 
-import Navbar from '@/components/Navbar';
 import { getCurrentUser } from '../lib/auth';
 import AuthHydrator from '@/components/AuthHydrator';
 import { redirect } from 'next/navigation';
@@ -25,7 +24,7 @@ export default async function DashboardLayout({
     <>
       <AuthHydrator user={user} />
       <section className='flex items-center justify-center'>
-        <div className='w-5xl'>{children}</div>
+        <div className='w-xs md:w-xl lg:w-5xl'>{children}</div>
       </section>
     </>
   );

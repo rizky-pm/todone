@@ -8,9 +8,15 @@ const Buttons = () => {
   const applyFilter = useFilterStore((store) => store.applyFilter);
 
   return (
-    <div className='space-x-2'>
-      <Button onClick={applyFilter}>Apply</Button>
-      <Button variant={'outline'} onClick={clearFilter}>
+    <div className='space-y-2 lg:space-y-0 lg:space-x-2'>
+      <Button onClick={applyFilter} className='w-full lg:w-auto'>
+        Apply
+      </Button>
+      <Button
+        variant={'outline'}
+        onClick={clearFilter}
+        className='w-full lg:w-auto'
+      >
         Clear
       </Button>
     </div>

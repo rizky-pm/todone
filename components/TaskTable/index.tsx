@@ -16,7 +16,7 @@ const TaskTable = async () => {
 
   return (
     <div className='shadow-sm p-4 rounded-lg'>
-      <div className='flex justify-between items-center'>
+      <div className='flex flex-col lg:flex-row lg:justify-between lg:items-center'>
         <TypographyH4>Tasks</TypographyH4>
 
         <FilterActions />

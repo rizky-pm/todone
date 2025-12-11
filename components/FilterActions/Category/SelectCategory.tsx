@@ -27,7 +27,7 @@ const SelectCategory = (props: IProps) => {
 
   return (
     <Select value={selectedCategory || ''} onValueChange={setCategory}>
-      <SelectTrigger className='w-[150px]'>
+      <SelectTrigger className='w-full lg:w-[150px]'>
         <SelectValue placeholder='All Categories' />
       </SelectTrigger>
       <SelectContent>

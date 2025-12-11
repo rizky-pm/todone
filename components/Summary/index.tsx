@@ -14,8 +14,8 @@ const Summary = ({ data }: SummaryProps) => {
   const summary = summaryResponse?.data ?? data;
 
   return (
-    <div className='flex gap-4'>
-      <div className='shadow-sm rounded-lg w-1/4 p-4 flex justify-between items-center'>
+    <div className='flex flex-col justify-center items-center lg:flex-row lg:justify-start lg:items-start gap-4'>
+      <div className='shadow-sm rounded-lg w-full lg:w-1/4 p-4 flex justify-between items-center'>
         <div className='flex flex-col'>
           <TypographyMuted>Total tasks</TypographyMuted>
           <span className='font-bold text-2xl'>{summary.total}</span>
@@ -25,7 +25,7 @@ const Summary = ({ data }: SummaryProps) => {
         </div>
       </div>
 
-      <div className='shadow-sm rounded-lg w-1/4 p-4 flex justify-between items-center'>
+      <div className='shadow-sm rounded-lg w-full lg:w-1/4 p-4 flex justify-between items-center'>
         <div className='flex flex-col'>
           <TypographyMuted>Completed</TypographyMuted>
           <span className='font-bold text-2xl'>{summary.completed}</span>
@@ -35,7 +35,7 @@ const Summary = ({ data }: SummaryProps) => {
         </div>
       </div>
 
-      <div className='shadow-sm rounded-lg w-1/4 p-4 flex justify-between items-center'>
+      <div className='shadow-sm rounded-lg w-full lg:w-1/4 p-4 flex justify-between items-center'>
         <div className='flex flex-col'>
           <TypographyMuted>In Progress</TypographyMuted>
           <span className='font-bold text-2xl'>{summary.incomplete}</span>
@@ -45,7 +45,7 @@ const Summary = ({ data }: SummaryProps) => {
         </div>
       </div>
 
-      <div className='shadow-sm rounded-lg w-1/4 p-4 flex justify-between items-center'>
+      <div className='shadow-sm rounded-lg w-full lg:w-1/4 p-4 flex justify-between items-center'>
         <div className='flex flex-col'>
           <TypographyMuted>Overdue</TypographyMuted>
           <span className='font-bold text-2xl'>{summary.overdue}</span>

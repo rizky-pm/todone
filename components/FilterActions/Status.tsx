@@ -17,11 +17,11 @@ const SelectStatus = () => {
   const setStatus = useFilterStore((store) => store.setStatus);
 
   return (
-    <div className='flex items-center gap-2'>
+    <div className='flex flex-col lg:flex-row lg:items-center gap-2'>
       <TypographySmall>Status</TypographySmall>
 
       <Select value={selectedStatus || ''} onValueChange={setStatus}>
-        <SelectTrigger className='w-[150px]'>
+        <SelectTrigger className='w-full lg:w-[150px]'>
           <SelectValue placeholder='All Status' />
         </SelectTrigger>
         <SelectContent>

@@ -5,7 +5,7 @@ import Buttons from './Buttons';
 
 const FilterActions = () => {
   return (
-    <div className='flex gap-4 items-center'>
+    <div className='flex flex-col lg:flex-row gap-4 mt-4 lg:mt-0 lg:items-center'>
       <Category />
       <SelectStatus />
       <SelectPriority />
