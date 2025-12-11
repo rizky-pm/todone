@@ -5,10 +5,11 @@ import { safeJson } from '@/app/lib/parsers';
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { taskId: string } }
+  { params }: { params: Promise<{ taskId: string }> }
 ) {
   const url = req.url;
   const path = new URL(url).pathname;
+  const taskId = (await params).taskId;
 
   try {
     const userId = req.headers.get('x-user-id');
@@ -17,11 +18,11 @@ export async function GET(
       throw new HttpError(401, 'Unauthorized');
     }
 
-    const task = await getTaskById(params.taskId, userId);
+    const task = await getTaskById(taskId, userId);
 
     return NextResponse.json({
       success: true,
-      message: `Success retrieve data of task id ${params.taskId}`,
+      message: `Success retrieve data of task id ${taskId}`,
       data: task,
     });
   } catch (error) {
