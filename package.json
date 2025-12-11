@@ -8,10 +8,12 @@
     "start": "next start",
     "lint": "eslint",
     "seed:dev": "cross-env NODE_ENV=development tsx prisma/seed.ts",
+    "seed:prod": "cross-env NODE_ENV=production tsx prisma/seed.ts",
     "seed:test": "cross-env NODE_ENV=test tsx prisma/seed.ts"
   },
   "prisma": {
     "seed:dev": "cross-env NODE_ENV=development tsx prisma/seed.ts",
+    "seed:prod": "cross-env NODE_ENV=production tsx prisma/seed.ts",
     "seed:test": "cross-env NODE_ENV=test tsx prisma/seed.ts"
   },
   "dependencies": {
