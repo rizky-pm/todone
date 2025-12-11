@@ -29,6 +29,7 @@ import {
   useUpdateTask,
 } from '@/app/services/tasks';
 import { MoreHorizontal } from 'lucide-react';
+import { Spinner } from '../ui/spinner';
 
 const ColumnActions = ({ row }: { row: Row<TaskWithCategory> }) => {
   const [isDialogDeleteOpen, setIsDialogDeleteOpen] = useState(false);
@@ -37,14 +38,14 @@ const ColumnActions = ({ row }: { row: Row<TaskWithCategory> }) => {
   const task = row.original;
 
   const queryClient = useQueryClient();
-  const { mutateAsync: updateTask } = useUpdateTask();
-  const { mutateAsync: deleteTask } = useDeleteTask();
+  const { mutateAsync: updateTask, isPending: updatingTask } = useUpdateTask();
+  const { mutateAsync: deleteTask, isPending: deletingTask } = useDeleteTask();
 
   const onClickViewDetails = () => {
     router.push(`/task/${task.id}`);
   };
 
-  const onClickComplete = () => {
+  const onClickUpdateStatus = () => {
     updateTask(
       { payload: undefined, taskId: task.id },
       {
@@ -54,6 +55,7 @@ const ColumnActions = ({ row }: { row: Row<TaskWithCategory> }) => {
           });
 
           queryClient.invalidateQueries({ queryKey: ['task.get-all'] });
+          queryClient.invalidateQueries({ queryKey: ['task.get-summary'] });
         },
         onError: (error) => {
           if (axios.isAxiosError(error)) {
@@ -75,7 +77,9 @@ const ColumnActions = ({ row }: { row: Row<TaskWithCategory> }) => {
             duration: 4000,
           });
 
+          setIsDialogDeleteOpen(false);
           queryClient.invalidateQueries({ queryKey: ['task.get-all'] });
+          queryClient.invalidateQueries({ queryKey: ['task.get-summary'] });
         },
         onError: (error) => {
           if (axios.isAxiosError(error)) {
@@ -104,12 +108,22 @@ const ColumnActions = ({ row }: { row: Row<TaskWithCategory> }) => {
             <DropdownMenuItem onClick={onClickViewDetails}>
               View Details
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={onClickComplete}>
-              {row.original.completedAt
-                ? 'Mark as incomplete'
-                : 'Mark as complete'}
+            <DropdownMenuItem
+              onClick={onClickUpdateStatus}
+              disabled={updatingTask}
+            >
+              {updatingTask ? (
+                <>
+                  <Spinner /> Updating
+                </>
+              ) : row.original.completedAt ? (
+                'Mark as incomplete'
+              ) : (
+                'Mark as complete'
+              )}
             </DropdownMenuItem>
             <DropdownMenuItem
+              disabled={updatingTask}
               onClick={() => {
                 setIsDialogDeleteOpen(true);
               }}
@@ -131,10 +145,22 @@ const ColumnActions = ({ row }: { row: Row<TaskWithCategory> }) => {
           </DialogHeader>
           <DialogFooter>
             <DialogClose asChild>
-              <Button variant='outline'>Cancel</Button>
+              <Button variant='outline' disabled={deletingTask}>
+                Cancel
+              </Button>
             </DialogClose>
-            <Button type='submit' onClick={onClickDelete}>
-              Delete
+            <Button
+              type='submit'
+              onClick={onClickDelete}
+              disabled={deletingTask}
+            >
+              {deletingTask ? (
+                <>
+                  <Spinner /> Deleting
+                </>
+              ) : (
+                'Delete'
+              )}
             </Button>
           </DialogFooter>
         </DialogContent>
