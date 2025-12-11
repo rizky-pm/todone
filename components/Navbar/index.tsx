@@ -3,7 +3,6 @@
 import { Menu, Plus } from 'lucide-react';
 import { Button } from '../ui/button';
 import { TypographySmall } from '../ui/typography';
-import UserAvatar from './UserAvatar';
 import { usePathname, useRouter } from 'next/navigation';
 import useIsLandingPage from '@/hooks/useIsLandingPage';
 import { useBreakpoints } from '@/hooks/useBreakpoints';
@@ -16,6 +15,9 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
+import dynamic from 'next/dynamic';
+
+const UserAvatar = dynamic(() => import('./UserAvatar'));
 
 const AuthButtons = () => {
   const router = useRouter();
